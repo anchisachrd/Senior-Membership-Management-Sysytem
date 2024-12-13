@@ -2,7 +2,7 @@ import React from 'react'
 
 function StaffCandidateList() {
   return (
-    <div>StaffCandidateList</div>
+    <div class="p-4 sm:ml-64">StaffCandidateList</div>
   )
 }
 
