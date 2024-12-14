@@ -1,4 +1,4 @@
--- Create ENUM types
+-- Enum Types
 CREATE TYPE user_role AS ENUM (
     'candidate',   -- Applicant
     'member',      -- Approved member
@@ -7,93 +7,94 @@ CREATE TYPE user_role AS ENUM (
     'committee',   -- Potentially higher-level decision makers
     'admin'        -- Manages staff and committee information
 );
+
 CREATE TYPE document_entity_type AS ENUM ('candidate', 'heir');
 
 -- Accounts Table
-CREATE TABLE Accounts (
-    AccountID SERIAL PRIMARY KEY,
-    Email VARCHAR(100) UNIQUE NOT NULL,
-    PasswordHash VARCHAR(255) NOT NULL,
-    Role user_role NOT NULL DEFAULT 'candidate',
-    IsActive BOOLEAN DEFAULT FALSE,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE accounts (
+    account_id SERIAL PRIMARY KEY,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role user_role NOT NULL DEFAULT 'candidate',
+    is_active BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
 -- Address Table
-CREATE TABLE Address (
-    AddressID SERIAL PRIMARY KEY,
-    HouseNumber VARCHAR(50),
-    Moo VARCHAR(50),
-    Soi VARCHAR(50),
-    Street VARCHAR(100),
-    Province VARCHAR(50),
-    District VARCHAR(50),
-    Subdistrict VARCHAR(50),
-    PostalCode CHAR(5)
+CREATE TABLE address (
+    address_id SERIAL PRIMARY KEY,
+    house_number VARCHAR(50),
+    moo VARCHAR(50),
+    soi VARCHAR(50),
+    street VARCHAR(100),
+    province VARCHAR(50),
+    district VARCHAR(50),
+    subdistrict VARCHAR(50),
+    postal_code CHAR(5)
 );
 
 -- Heirs Table
-CREATE TABLE Heirs (
-    HeirID SERIAL PRIMARY KEY,
-    Title VARCHAR(10) NOT NULL,
-    FirstName VARCHAR(50) NOT NULL,
-    LastName VARCHAR(50) NOT NULL,
-    NationalID CHAR(13) UNIQUE NOT NULL,
-    DOB DATE NOT NULL,
-    Email VARCHAR(100),
-    Phone VARCHAR(15),
-    Gender CHAR(1),
-    Occupation VARCHAR(100),
-    AddressID INT,
-    DocumentID INT,
-    AccountID INT,
-    FOREIGN KEY (AddressID) REFERENCES Address(AddressID) ON DELETE SET NULL,
-    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID) ON DELETE CASCADE
+CREATE TABLE heirs (
+    heir_id SERIAL PRIMARY KEY,
+    title VARCHAR(10) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    national_id CHAR(13) UNIQUE NOT NULL,
+    dob DATE NOT NULL,
+    email VARCHAR(100),
+    phone VARCHAR(15),
+    gender CHAR(1) CHECK (gender IN ('M', 'F', 'O', 'N')),
+    occupation VARCHAR(100),
+	relationship VARCHAR(20),
+    address_id INT,
+    document_id INT,
+    account_id INT,
+    FOREIGN KEY (address_id) REFERENCES address(address_id) ON DELETE SET NULL,
+    FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE CASCADE
 );
 
 -- Candidates Table
-CREATE TABLE Candidates (
-    CandidateID SERIAL PRIMARY KEY,
-    Title VARCHAR(10) NOT NULL,
-    FirstName VARCHAR(50) NOT NULL,
-    LastName VARCHAR(50) NOT NULL,
-    NationalID CHAR(13) UNIQUE NOT NULL,
-    DOB DATE NOT NULL,
-    Phone VARCHAR(10) NOT NULL,
-    Gender CHAR(1) NOT NULL,
-    Occupation VARCHAR(100) NOT NULL,
-    Priority BOOLEAN DEFAULT FALSE,
-    IsApproved BOOLEAN DEFAULT FALSE,
-    DocVerificationStatus VARCHAR(50) DEFAULT 'กำลังตรวจสอบ',
-    AddressID INT,
-    DocumentID INT,
-    AccountID INT,
-    HeirID INT,
-    FOREIGN KEY (HeirID) REFERENCES Heirs(HeirID) ON DELETE SET NULL,
-    FOREIGN KEY (AddressID) REFERENCES Address(AddressID) ON DELETE SET NULL,
-    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID) ON DELETE CASCADE
+CREATE TABLE candidates (
+    candidate_id SERIAL PRIMARY KEY,
+    title VARCHAR(10) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    national_id CHAR(13) UNIQUE NOT NULL,
+    dob DATE NOT NULL,
+    phone VARCHAR(10) NOT NULL,
+    gender CHAR(1) CHECK (gender IN ('M', 'F', 'O', 'N')),
+    occupation VARCHAR(100) NOT NULL,
+    priority BOOLEAN DEFAULT FALSE,
+    is_approved BOOLEAN DEFAULT FALSE,
+    doc_verification_status VARCHAR(50) DEFAULT 'กำลังตรวจสอบ',
+    address_id INT,
+    document_id INT,
+    account_id INT,
+    heir_id INT,
+	parent_id INT,
+    FOREIGN KEY (heir_id) REFERENCES heirs(heir_id) ON DELETE SET NULL,
+    FOREIGN KEY (address_id) REFERENCES address(address_id) ON DELETE SET NULL,
+    FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE CASCADE,
 );
 
 -- Documents Table
-CREATE TABLE Documents (
-    DocumentID SERIAL PRIMARY KEY,
-    DocPath VARCHAR(50),
-    DocType VARCHAR(50),
-    EntityType document_entity_type NOT NULL,
-    EntityID INT NOT NULL,
-    CONSTRAINT fk_candidate FOREIGN KEY (EntityID) REFERENCES Candidates(CandidateID) ON DELETE CASCADE,
-    CONSTRAINT fk_heir FOREIGN KEY (EntityID) REFERENCES Heirs(HeirID) ON DELETE CASCADE
+CREATE TABLE documents (
+    document_id SERIAL PRIMARY KEY,
+    doc_path VARCHAR(50),
+    doc_type VARCHAR(50),
+    entity_type document_entity_type NOT NULL,
+    entity_id INT NOT NULL,
+    CONSTRAINT fk_candidate FOREIGN KEY (entity_id) REFERENCES candidates(candidate_id) ON DELETE CASCADE,
+    CONSTRAINT fk_heir FOREIGN KEY (entity_id) REFERENCES heirs(heir_id) ON DELETE CASCADE
 );
 
 -- Members Table
-CREATE TABLE Members (
-    MemberID SERIAL PRIMARY KEY,
-    CandidateID INT,
-    StartDate DATE NOT NULL,
-    EndDate DATE NOT NULL,
-    LeavingReason VARCHAR(255),
-    HeirID INT,
-    FOREIGN KEY (CandidateID) REFERENCES Candidates(CandidateID) ON DELETE CASCADE
+CREATE TABLE members (
+    member_id SERIAL PRIMARY KEY,
+    candidate_id INT,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    leaving_reason VARCHAR(255),
+    FOREIGN KEY (candidate_id) REFERENCES candidates(candidate_id) ON DELETE CASCADE
 );
