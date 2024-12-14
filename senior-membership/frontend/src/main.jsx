@@ -36,7 +36,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       
       {/* หน้าที่ไม่ต้องมี side bar */}
       <Route path='/login' element={ <Login />} />
-      <Route path='/staff/login' element={ <LoginStaff />} />
+      <Route path='/staff_login' element={ <LoginStaff />} />
       <Route path='/register' element={ <Register />} />
     </Routes>
   </BrowserRouter>,

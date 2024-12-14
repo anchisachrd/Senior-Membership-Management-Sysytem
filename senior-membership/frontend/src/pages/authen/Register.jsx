@@ -523,11 +523,11 @@ function RegisterPage2() {
 function Confirm() {
   return (
     <div class='p-8'>
-      <div class="max-w-screen-lg mx-auto overflow-hidden md:max-w-3xl lg:max-w-3xl">
+      <div class="max-w-screen-lg mx-auto overflow-hidden md:max-w-3xl lg:max-w-3xl place-items-center">
         <div class="2xl:flex">
           <div className='ibm-plex-sans-thai-medium'>
-            <div class="p-8 bg-white border border-lime-200 rounded-lg shadow dark:bg-lime-600 dark:border-lime-500 overflow-hidden">
-              <div class="grid gap-6 md:grid-cols-1">
+            <div class="p-10 bg-white border border-lime-200 rounded-lg shadow dark:bg-lime-600 dark:border-lime-500 overflow-hidden">
+              <div class="grid gap-6 md:grid-cols-1 place-items-center">
                 <FaCircleCheck class="mt-1 w-10 h-10 text-white text-lg transition duration-75" aria-hidden="true" />
 
                 <p class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">คุณลงทะเบียนชมรมผู้สูงอายุสำเร็จเรียบร้อยแล้ว</p>
@@ -579,25 +579,15 @@ function Register() {
 
   return (
     <div>
-      {/* แก้ทีหลัง */}
-      {/* <div class="max-w-md mx-auto bg-white overflow-hidden md:max-w-2xl">
-        <a href="" class="flex items-center mb-5">
-          <img src="logo.png"
-            class="h-auto max-w-xs" alt="Logo" />
-        </a>
-      </div> */}
-
-
       <nav class="bg-white">
         <div class="max-w-screen-3xl flex flex-wrap items-center justify-between mx-auto p-4">
             <img src="logo.png" class="h-16" alt="Logo" />
         </div>
       </nav>
 
-
       {step !== 3 ? (
         <form class='p-8'>
-          <div class="max-w-screen-lg mx-auto overflow-hidden md:max-w-3xl">
+          <div class="max-w-screen-lg mx-auto overflow-hidden md:max-w-3xl place-items-center">
             <div class="2xl:flex">
               <div className='ibm-plex-sans-thai-medium'>
                 <div class="text-center text-3xl text-black mb-8 font-bold">ลงทะเบียนชมรมผู้สูงอายุ</div>
