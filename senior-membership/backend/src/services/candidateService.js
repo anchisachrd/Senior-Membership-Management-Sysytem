@@ -1,40 +1,46 @@
 import { query } from "../db.js"
-import { createAddress, getAddressById } from "./addressService.js";
-
-export const getAllCandidates = async() => {
-    const {rows} = await query('SELECT * FROM candidates');
-    return rows;
-}
-
-//สร้างผู้สมัคร
-export const createCandidate = async(candidateData) => {
-    const { title, fname, lname, nationalID, dob, phone, gender, job, address, document, account, heirData } = candidateData;
-
-    const newAddress = await createAddress(address);
-
-    const { rows } = await query (
-        `INSERT INTO candidates (title, first_name, last_name, national_id, dob, phone, gender, occupation, address_id, document_id, account_id, heir_id) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`,
-         [ title, fname, lname,  nationalID, dob, phone, gender, job, newAddress.address_id , document, account, heirData]
-    );
-    return {...rows[0], address: newAddress};
-}
+import * as addressModel  from "../models/addressModel.js";
+import * as candidateModel from "../models/candidateModel.js"
+import * as documentModel from "../models/documentModel.js"
+import * as accountModel from "../models/accountModel.js"
+import * as heirModel from "../models/heirModel.js"
 
 
+export const getAllCandidates = async () => {
+  return await candidateModel.getAllCandidates();
+};
 
+// Create a new candidate
+export const createCandidate = async (candidateData) => {
+  // Step 1: Create the address
+  const newAddress = await addressModel.createAddress(candidateData.address);
+  const newDocument = await documentModel.createDocument(candidateData.document)
+  const newAccount = await accountModel.createAccount(candidateData.account)
+  const newHeir = await heirModel.createHeir(candidateData.heir)
 
+  // Step 2: Insert the candidate, passing the address_id from the newly created address
+  const candidateAlldata = await candidateModel.createCandidate({
+    ...candidateData,
+    address_id: newAddress.address_id,  // Address ID from the model layer
+    document_id: newDocument.document_id,
+    account_id: newAccount.account_id,
+    heir_id: newHeir.heir_id
+  });
+
+  return { ...candidateAlldata, address: newAddress, document: newDocument, account: newAccount, heir: newHeir };  // Return both candidate data and address data
+};
+
+// Get candidate by ID
 export const getCandidateById = async (id) => {
-    // Get candidate details
-    const candidateResult = await query(
-      `SELECT * FROM candidates WHERE candidate_id = $1`,
-      [id]
-    );
-  
-    const candidate = candidateResult.rows[0];
-    if (!candidate) throw new Error('Candidate not found');
-  
-    // เอาที่อยู่ที่เราต้องการจาก fk address_id in candidate
-    const address = await getAddressById(candidate.address_id);
-  
-    return { ...candidate, address };
-  };
+  const candidate = await candidateModel.getCandidateById(id);
+
+  if (!candidate) {
+    throw new Error('Candidate not found');
+  }
+
+  const address = await addressModel.getAddressById(candidate.address_id);
+  const document = await documentModel.getDocumentById(candidate.document_id)
+  const account =  await accountModel.getAccountById(candidate.account_id)
+  const heir = await heirModel.getHeirById(candidate.heir_id)
+  return { ...candidate, address, document, account, heir};
+};
