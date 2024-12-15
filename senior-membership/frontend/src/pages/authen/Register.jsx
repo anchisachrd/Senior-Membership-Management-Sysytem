@@ -1,8 +1,59 @@
 import React, { useState } from 'react'
 import { FaCircleCheck } from "react-icons/fa6";
 import { Link } from "react-router";
+import { createCandidate } from '../../api/candidateApi';
 
 function RegisterPage1() {
+  const [candidateData, setCandidateData] = useState({
+    title: "",
+    fname: "",
+    lname: "",
+    nationalID: "",
+    dob: "",
+    phone: "",
+    gender: "",
+    job: "",
+    address: {
+        house_num: "",
+        street: "",
+        province: "",
+        postal_code: ""
+    },
+    "document": "1",
+    "account": "1",
+    "heirData": "1"
+    }
+  );
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'address') {
+      setCandidateData({
+        ...candidateData,
+        address: {
+          ...candidateData.address,
+          [e.target.dataset.field]: value,
+        },
+      });
+    } else {
+      setCandidateData({
+        ...candidateData,
+        [name]: value,
+      });
+    }
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await createCandidate(candidateData);
+      setMessage(response.message);
+    } catch (error) {
+      setMessage('Error occurred while creating candidate');
+    }
+  };
+
+
   return (
     <div>
       {/* กล่อง register 1 */}
@@ -581,12 +632,12 @@ function Register() {
     <div>
       <nav class="bg-white">
         <div class="max-w-screen-3xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <img src="logo.png" class="h-16" alt="Logo" />
+          <img src="logo.png" class="h-16" alt="Logo" />
         </div>
       </nav>
 
       {step !== 3 ? (
-        <form class='p-8'>
+        <form class='p-8' onSubmit={handleSubmit}>
           <div class="max-w-screen-lg mx-auto overflow-hidden md:max-w-3xl place-items-center">
             <div class="2xl:flex">
               <div className='ibm-plex-sans-thai-medium'>
