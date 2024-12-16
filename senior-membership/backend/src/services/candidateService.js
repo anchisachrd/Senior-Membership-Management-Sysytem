@@ -15,7 +15,12 @@ export const createCandidate = async (candidateData) => {
   // Step 1: Create the address
   const newAddress = await addressModel.createAddress(candidateData.address);
   const newDocument = await documentModel.createDocument(candidateData.document)
-  const newAccount = await accountModel.createAccount(candidateData.account)
+  const newAccount = await accountModel.createAccount(
+    candidateData.account.email,
+    candidateData.account.password, // Make sure to send the password here
+    candidateData.account.role,
+    candidateData.account.is_active
+  );
   const newHeir = await heirModel.createHeir(candidateData.heir)
 
   // Step 2: Insert the candidate, passing the address_id from the newly created address
