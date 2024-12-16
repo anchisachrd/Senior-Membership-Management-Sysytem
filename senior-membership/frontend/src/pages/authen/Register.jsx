@@ -711,11 +711,9 @@ function Register() {
             </div>
           </div>
         </form>
-
       ) : (
         <Confirm />
       )}
-
     </div>
   )
 }

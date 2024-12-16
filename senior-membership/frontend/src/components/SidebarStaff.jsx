@@ -5,10 +5,11 @@ import { LuPiggyBank, LuUserRoundCog } from "react-icons/lu";
 import { MdOutlineDashboard } from "react-icons/md";
 import { TiDocumentText } from "react-icons/ti";
 import { FaRegCircleCheck } from "react-icons/fa6";
+import { Link } from "react-router";
 
 function SidebarStaff() {
-  const role = 'committee';
-  // const role = 'staff';
+  // const role = 'committee';
+  const role = 'staff';
   return (
     <div className='ibm-plex-sans-thai-medium'>
     <button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -100,9 +101,9 @@ function SidebarStaff() {
             </button>
             <ul id="dropdown-example" class="hidden py-3 space-y-2">
                   <li>
-                    <a href="#" class="flex items-center p-2 ml-11 rounded-lg dark:text-gray-500 dark:hover:bg-gray-700 group">
+                    <Link to='/staff_candidateList' class="flex items-center p-2 ml-11 rounded-lg dark:text-gray-500 dark:hover:bg-gray-700 group">
                     <span class="ms-3 mt-1 dark:group-hover:text-white">จัดการผู้สมัคร</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a href="#" class="flex items-center p-2 ml-11 rounded-lg dark:text-gray-500 dark:hover:bg-gray-700 group">
