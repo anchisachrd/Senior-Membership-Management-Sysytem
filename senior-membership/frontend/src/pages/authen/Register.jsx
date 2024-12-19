@@ -1,8 +1,17 @@
 import React, { useState } from 'react'
 import { FaCircleCheck } from "react-icons/fa6";
 import { Link } from "react-router";
+import { createCandidate } from '../../api/candidateApi.js';
 
-function RegisterPage1() {
+function RegisterPage1({ formData, setFormData }) {
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: files ? files[0] : value
+    }));
+  };
   return (
     <div>
       {/* กล่อง register 1 */}
@@ -13,7 +22,14 @@ function RegisterPage1() {
           <div class="grid gap-6 mb-6 md:grid-cols-3">
             <div>
               <label for="title_name_member" class="block mb-2 text-sm font-medium text-gray-900">คำนำหน้า</label>
-              <select id="title_name_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2">
+              <select
+                name="title"
+                values={formData.title || ''}
+                onChange={handleChange}
+                id="title_name_member"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                required
+              >
                 <option selected>เลือกคำนำหน้า</option>
                 <option value="mr">นาย</option>
                 <option value="miss">นางสาว</option>
@@ -23,30 +39,73 @@ function RegisterPage1() {
 
             <div>
               <label for="first_name_member" class="block mb-2 text-sm font-medium text-gray-900 ">ชื่อจริง</label>
-              <input type="text" id="first_name_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกชื่อของผู้สมัคร" />
+              <input
+                type="text"
+                name='first_name'
+                onChange={handleChange}
+                values={formData.first_name || ''}
+                id="first_name_member"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกชื่อของผู้สมัคร"
+                required
+              />
             </div>
 
             <div>
               <label for="last_name_member" class="block mb-2 text-sm font-medium text-gray-900 ">นามสกุล</label>
-              <input type="text" id="last_name_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกนามสกุลของผู้สมัคร" />
+              <input
+                type="text"
+                name='last_name'
+                onChange={handleChange}
+                values={formData.last_name || ''}
+                id="last_name_member"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกนามสกุลของผู้สมัคร"
+                required
+              />
             </div>
 
             <div>
               <label for="id_number_member" class="block mb-2 text-sm font-medium text-gray-900 ">เลขบัตรประชาชน</label>
-              <input type="text" id="id_number_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกเลขบัตรประชาชน" />
+              <input
+                type="text"
+                name='national_id'
+                onChange={handleChange}
+                values={formData.national_id || ''}
+                id="id_number_member"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกเลขบัตรประชาชน"
+                required
+              />
             </div>
 
             <div>
               <label for="birth_day_member" class="block mb-2 text-sm font-medium text-gray-900 ">วัน/เดือน/ปี เกิด</label>
-              <input id="birth_day_member" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="เลือกวันเกิด" />
+              <input
+                id="birth_day_member"
+                onChange={handleChange}
+                name='dob'
+                values={formData.dob || ''}
+                type="date"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="เลือกวันเกิด"
+                required
+              />
             </div>
 
             <div>
               <label for="sex_member" class="block mb-2 text-sm font-medium text-gray-900">เพศ</label>
-              <select id="sex_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2">
+              <select
+                id="sex_member"
+                name='gender'
+                values={formData.gender || ''}
+                onChange={handleChange}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                required
+              >
                 <option selected class='text-opacity-25'>เลือกเพศ</option>
-                <option value="man">ชาย</option>
-                <option value="woman">หญิง</option>
+                <option value="M">ชาย</option>
+                <option value="F">หญิง</option>
               </select>
             </div>
 
@@ -55,36 +114,77 @@ function RegisterPage1() {
           <div class="grid gap-6 mb-4 md:grid-cols-2">
             <div>
               <label for="job_member" class="block mb-2 text-sm font-medium text-gray-900">อาชีพ</label>
-              <select id="job_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2">
+              <select
+                id="job_member"
+                name='occupation'
+                values={formData.occupation || ''}
+                onChange={handleChange}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                required
+              >
                 <option selected>เลือกอาชีพ</option>
-                <option value="">อาชีพ 1</option>
-                <option value="">อาชีพ 2</option>
-                <option value="">อาชีพ 3</option>
+                <option value="1">อาชีพ 1</option>
+                <option value="2">อาชีพ 2</option>
+                <option value="3">อาชีพ 3</option>
               </select>
             </div>
 
             <div >
               <label for="phone_member" class="block mb-2 text-sm font-medium text-gray-900 ">หมายเลขโทรศัพท์</label>
-              <input type="text" id="phone_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมายเลขโทรศัพท์" />
+              <input
+                type="text"
+                name='phone'
+                values={formData.phone || ''}
+                onChange={handleChange}
+                id="phone_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกหมายเลขโทรศัพท์"
+                required
+              />
             </div>
 
           </div>
 
           <div class='mb-4'>
             <label for="email_member" class="block mb-2 text-sm font-medium text-gray-900 ">อีเมล</label>
-            <input type="text" id="email_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกอีเมลของผู้สมัคร" />
+            <input
+              type="text"
+              name='email'
+              id="email_member"
+              values={formData.email || ''}
+              onChange={handleChange}
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+              placeholder="กรอกอีเมลของผู้สมัคร"
+              required
+            />
           </div>
 
           <div class="grid gap-6 mb-4 md:grid-cols-2">
 
             <div>
               <label for="password_member" class="block mb-2 text-sm font-medium text-gray-900 ">รหัสผ่าน</label>
-              <input type="password" id="password_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกรหัสผ่าน" />
+              <input
+                type="password"
+                name='password'
+                id="password_member"
+                onChange={handleChange}
+                values={formData.password || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกรหัสผ่าน"
+                required
+              />
             </div>
 
             <div>
               <label for="confirm_password_member" class="block mb-2 text-sm font-medium text-gray-900 ">ยืนยันรหัสผ่าน</label>
-              <input type="password" id="confirm_password_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกรหัสผ่านให้ตรงกัน" />
+              <input
+                type="password"
+                id="confirm_password_member"
+
+                onChange={handleChange}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกรหัสผ่านให้ตรงกัน"
+                required
+              />
             </div>
 
           </div>
@@ -98,17 +198,44 @@ function RegisterPage1() {
 
             <div >
               <label for="home_number_member" class="block mb-2 text-sm font-medium text-gray-900 ">บ้านเลขที่</label>
-              <input type="text" id="home_number_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกบ้านเลขที่" />
+              <input
+                type="text"
+                name='house_num'
+                id="home_number_member"
+                values={formData.house_num || ''}
+                onChange={handleChange}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกบ้านเลขที่"
+
+              />
             </div>
 
             <div >
               <label for="moo_member" class="block mb-2 text-sm font-medium text-gray-900 ">หมู่ที่</label>
-              <input type="text" id="moo_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมู่ที่" />
+              <input
+                type="text"
+                name='moo'
+                values={formData.moo || ''}
+                id="moo_member"
+                onChange={handleChange}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกหมู่ที่"
+
+              />
             </div>
 
             <div >
               <label for="soi_member" class="block mb-2 text-sm font-medium text-gray-900 ">ซอย</label>
-              <input type="text" id="soi_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกซอย" />
+              <input
+                type="text"
+                name='soi'
+                values={formData.soi || ''}
+                onChange={handleChange}
+                id="soi_member"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกซอย"
+
+              />
             </div>
 
           </div>
@@ -117,22 +244,56 @@ function RegisterPage1() {
 
             <div >
               <label for="road_member" class="block mb-2 text-sm font-medium text-gray-900 ">ถนน</label>
-              <input type="text" id="road_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกถนน" />
+              <input
+                type="text"
+                name='street'
+                values={formData.street || ''}
+                onChange={handleChange}
+                id="road_member"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกถนน"
+
+              />
             </div>
 
             <div >
               <label for="sub_district_member" class="block mb-2 text-sm font-medium text-gray-900 ">ตำบล/แขวง</label>
-              <input type="text" id="sub_district_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกตำบลหรือแขวง" />
+              <input
+                type="text"
+                name='subdistrict'
+                values={formData.sundistrict || ''}
+                onChange={handleChange}
+                id="sub_district_member"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกตำบลหรือแขวง"
+                required
+              />
             </div>
 
             <div >
               <label for="district_member" class="block mb-2 text-sm font-medium text-gray-900 ">อำเภอ/เขต</label>
-              <input type="text" id="district_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกอำเภอหรือเขต" />
+              <input
+                type="text"
+                id="district_member"
+                values={formData.district || ''}
+                onChange={handleChange}
+                name='district'
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกอำเภอหรือเขต"
+                required
+              />
             </div>
 
             <div>
               <label for="province_member" class="block mb-2 text-sm font-medium text-gray-900">จังหวัด</label>
-              <select id="province_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2">
+              <select
+                id="province_member"
+                name='province'
+                values={formData.province || ''}
+                onChange={handleChange}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                required
+              >
                 <option selected>เลือกจังหวัด</option>
                 <option value="1">กระบี่</option>
                 <option value="2">กรุงเทพมหานคร</option>
@@ -219,7 +380,16 @@ function RegisterPage1() {
 
             <div >
               <label for="zip_member" class="block mb-2 text-sm font-medium text-gray-900 ">รหัสไปรษณีย์</label>
-              <input type="text" id="zip_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกรหัสไปรษณีย์" />
+              <input
+                type="text"
+                name='postal_code'
+                id="zip_member"
+                values={formData.postal_code || ''}
+                onChange={handleChange}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกรหัสไปรษณีย์"
+                required
+              />
             </div>
           </div>
 
@@ -236,22 +406,53 @@ function RegisterPage1() {
 
           <div>
             <label for="copy_house_member" class="block mb-2 text-sm font-medium text-gray-900">สำเนาทะเบียนบ้าน</label>
-            <input type="file" id="copy_house_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
+            <input
+              type="file"
+              name='house_registration'
+              id="copy_house_member"
+              onChange={handleChange}
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
+              required
+            />
           </div>
 
           <div class='mt-5'>
             <label for="copy_id_member" class="block mb-2 text-sm font-medium text-gray-900">สำเนาบัตรประชาชน</label>
-            <input type="file" id="copy_id_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
+            <input
+              type="file"
+              id="copy_id_member"
+              name='id_card'
+              onChange={handleChange}
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
+              required
+            />
           </div>
 
           <div class='mt-5'>
             <label for="doc_rename_member" class="block mb-2 text-sm font-medium text-gray-900">ใบเปลี่ยนชื่อ</label>
-            <input type="file" id="doc_rename_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
+            <input
+              type="file"
+              id="doc_rename_member"
+              name='rename_doc'
+              onChange={handleChange}
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
+
           </div>
 
           <div class='mt-5'>
             <label for="cer_med_member" class="block mb-2 text-sm font-medium text-gray-900">ใบรับรองแพทย์</label>
-            <input type="file" id="cer_med_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
+            <input
+              type="file"
+              id="cer_med_member"
+              name='med_certification'
+              onChange={handleChange}
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
+              required
+            />
           </div>
 
         </div>
@@ -260,7 +461,14 @@ function RegisterPage1() {
   )
 }
 
-function RegisterPage2() {
+function RegisterPage2({ formData, setFormData }) {
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: files ? files[0] : value
+    }));
+  };
   return (
     <div>
       {/* กล่อง register 3 */}
@@ -271,7 +479,14 @@ function RegisterPage2() {
           <div class="grid gap-6 mb-6 md:grid-cols-3">
             <div>
               <label for="title_name_heir" class="block mb-2 text-sm font-medium text-gray-900">คำนำหน้า</label>
-              <select id="title_name_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2">
+              <select
+                id="title_name_heir"
+                name='title'
+                onChange={handleChange}
+                values={formData.title || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                required
+              >
                 <option selected>เลือกคำนำหน้า</option>
                 <option value="mr">นาย</option>
                 <option value="miss">นางสาว</option>
@@ -281,27 +496,70 @@ function RegisterPage2() {
 
             <div>
               <label for="first_name_heir" class="block mb-2 text-sm font-medium text-gray-900 ">ชื่อจริง</label>
-              <input type="text" id="first_name_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกชื่อของทายาท" />
+              <input
+                type="text"
+                id="first_name_heir"
+                name='first_name'
+                onChange={handleChange}
+                values={formData.first_name || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกชื่อของทายาท"
+                required
+              />
             </div>
 
             <div>
               <label for="last_name_heir" class="block mb-2 text-sm font-medium text-gray-900 ">นามสกุล</label>
-              <input type="text" id="last_name_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกนามสกุลของทายาท" />
+              <input
+                type="text"
+                id="last_name_heir"
+                name='last_name'
+                onChange={handleChange}
+                values={formData.last_name || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกนามสกุลของทายาท"
+                required
+              />
             </div>
 
             <div>
               <label for="id_number_heir" class="block mb-2 text-sm font-medium text-gray-900 ">เลขบัตรประชาชน</label>
-              <input type="text" id="id_number_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกเลขบัตรประชาชน" />
+              <input
+                type="text"
+                id="id_number_heir"
+                name='national_id'
+                onChange={handleChange}
+                values={formData.national_id || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกเลขบัตรประชาชน"
+                required
+              />
             </div>
 
             <div>
               <label for="birth_day_heir" class="block mb-2 text-sm font-medium text-gray-900 ">วัน/เดือน/ปี เกิด</label>
-              <input id="birth_day_heir" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="เลือกวันเกิด" />
+              <input
+                id="birth_day_heir"
+                name='dob'
+                type="date"
+                onChange={handleChange}
+                values={formData.dob || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="เลือกวันเกิด"
+                required
+              />
             </div>
 
             <div>
               <label for="sex_heir" class="block mb-2 text-sm font-medium text-gray-900">เพศ</label>
-              <select id="sex_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2">
+              <select
+                id="sex_heir"
+                name='gender'
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                onChange={handleChange}
+                values={formData.gender || ''}
+                required
+              >
                 <option selected class='text-opacity-25'>เลือกเพศ</option>
                 <option value="man">ชาย</option>
                 <option value="woman">หญิง</option>
@@ -313,42 +571,89 @@ function RegisterPage2() {
           <div class="grid gap-6 mb-3 md:grid-cols-2">
             <div>
               <label for="job_heir" class="block mb-2 text-sm font-medium text-gray-900">อาชีพ</label>
-              <select id="job_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2">
+              <select
+                id="job_heir"
+                name='occupation'
+                onChange={handleChange}
+                values={formData.occupation || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                required
+              >
                 <option selected>เลือกอาชีพ</option>
-                <option value="">อาชีพ 1</option>
-                <option value="">อาชีพ 2</option>
-                <option value="">อาชีพ 3</option>
+                <option value="1">อาชีพ 1</option>
+                <option value="2">อาชีพ 2</option>
+                <option value="3">อาชีพ 3</option>
               </select>
             </div>
 
             <div>
               <label for="relationship_heir" class="block mb-2 text-sm font-medium text-gray-900">ความเกี่ยวข้อง</label>
-              <select id="relationship_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2">
+              <select
+                id="relationship_heir"
+                name='relationship'
+                onChange={handleChange}
+                values={formData.relationship || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                required
+              >
                 <option selected>เลือกความเกี่ยวข้อง</option>
-                <option value="">สามี/ภรรยา</option>
-                <option value="">ลูก</option>
-                <option value="">บลาๆ</option>
+                <option value="1">สามี/ภรรยา</option>
+                <option value="2">ลูก</option>
+                <option value="3">บลาๆ</option>
               </select>
             </div>
 
             <div>
               <label for="phone_heir" class="block mb-2 text-sm font-medium text-gray-900 ">หมายเลขโทรศัพท์</label>
-              <input type="text" id="phone_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมายเลขโทรศัพท์" />
+              <input
+                type="text"
+                id="phone_heir"
+                name='phone'
+                onChange={handleChange}
+                values={formData.phone || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกหมายเลขโทรศัพท์"
+                required
+              />
             </div>
 
             <div>
               <label for="email_heir" class="block mb-2 text-sm font-medium text-gray-900 ">อีเมล</label>
-              <input type="text" id="email_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกอีเมลของทายาท" />
+              <input
+                type="text"
+                id="email_heir"
+                name='email'
+                onChange={handleChange}
+                values={formData.email || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกอีเมลของทายาท"
+                required
+              />
             </div>
 
             <div>
               <label for="password_heir" class="block mb-2 text-sm font-medium text-gray-900 ">รหัสผ่าน</label>
-              <input type="password" id="password_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกรหัสผ่าน" />
+              <input
+                type="password"
+                id="password_heir"
+                name='password'
+                onChange={handleChange}
+                values={formData.password || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกรหัสผ่าน"
+                required
+              />
             </div>
 
             <div>
               <label for="confirm_password_heir" class="block mb-2 text-sm font-medium text-gray-900 ">ยืนยันรหัสผ่าน</label>
-              <input type="password" id="confirm_password_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกรหัสผ่านให้ตรงกัน" />
+              <input
+                type="password"
+                id="confirm_password_heir"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกรหัสผ่านให้ตรงกัน"
+                required
+              />
             </div>
 
           </div>
@@ -362,17 +667,41 @@ function RegisterPage2() {
 
             <div >
               <label for="home_number_member" class="block mb-2 text-sm font-medium text-gray-900 ">บ้านเลขที่</label>
-              <input type="text" id="home_number_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกบ้านเลขที่" />
+              <input
+                type="text"
+                id="home_number_member"
+                name='house_num'
+                onChange={handleChange}
+                values={formData.house_num || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกบ้านเลขที่"
+
+              />
             </div>
 
             <div >
               <label for="moo_member" class="block mb-2 text-sm font-medium text-gray-900 ">หมู่ที่</label>
-              <input type="text" id="moo_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมู่ที่" />
+              <input
+                type="text"
+                id="moo_member"
+                name='moo'
+                onChange={handleChange}
+                values={formData.moo || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกหมู่ที่" />
             </div>
 
             <div >
               <label for="soi_member" class="block mb-2 text-sm font-medium text-gray-900 ">ซอย</label>
-              <input type="text" id="soi_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกซอย" />
+              <input
+                type="text"
+                id="soi_member"
+                name='soi'
+                onChange={handleChange}
+                values={formData.soi || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกซอย"
+              />
             </div>
 
           </div>
@@ -381,22 +710,54 @@ function RegisterPage2() {
 
             <div >
               <label for="road_member" class="block mb-2 text-sm font-medium text-gray-900 ">ถนน</label>
-              <input type="text" id="road_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกถนน" />
+              <input
+                type="text"
+                name='street'
+                id="road_member"
+                onChange={handleChange}
+                values={formData.street || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกถนน" />
             </div>
 
             <div >
               <label for="sub_district_member" class="block mb-2 text-sm font-medium text-gray-900 ">ตำบล/แขวง</label>
-              <input type="text" id="sub_district_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกตำบลหรือแขวง" />
+              <input
+                type="text"
+                name='sub_district'
+                id="sub_district_member"
+                onChange={handleChange}
+                values={formData.sundistrict || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกตำบลหรือแขวง"
+                required
+              />
             </div>
 
             <div >
               <label for="district_member" class="block mb-2 text-sm font-medium text-gray-900 ">อำเภอ/เขต</label>
-              <input type="text" id="district_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกอำเภอหรือเขต" />
+              <input
+                type="text"
+                id="district_member"
+                name='district'
+                onChange={handleChange}
+                values={formData.district || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                placeholder="กรอกอำเภอหรือเขต"
+                required
+              />
             </div>
 
             <div>
               <label for="province_member" class="block mb-2 text-sm font-medium text-gray-900">จังหวัด</label>
-              <select id="province_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2">
+              <select
+                id="province_member"
+                name='province'
+                onChange={handleChange}
+                values={formData.province || ''}
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                required
+              >
                 <option selected>เลือกจังหวัด</option>
                 <option value="1">กระบี่</option>
                 <option value="2">กรุงเทพมหานคร</option>
@@ -483,7 +844,16 @@ function RegisterPage2() {
 
             <div >
               <label for="zip_member" class="block mb-2 text-sm font-medium text-gray-900 ">รหัสไปรษณีย์</label>
-              <input type="text" id="zip_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกรหัสไปรษณีย์" />
+              <input
+                type="text"
+                name='postal_code'
+                id="zip_member"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                onChange={handleChange}
+                values={formData.postal_code || ''}
+                placeholder="กรอกรหัสไปรษณีย์"
+                required
+              />
             </div>
           </div>
 
@@ -502,17 +872,40 @@ function RegisterPage2() {
 
           <div>
             <label for="copy_house_heir" class="block mb-2 text-sm font-medium text-gray-900">สำเนาทะเบียนบ้าน</label>
-            <input type="file" id="copy_house_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
+            <input
+              type="file"
+              id="copy_house_heir"
+              name='house_registration'
+              onChange={handleChange}
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
+              required
+              />
+           
           </div>
 
           <div class='mt-5'>
             <label for="copy_id_heir" class="block mb-2 text-sm font-medium text-gray-900">สำเนาบัตรประชาชน</label>
-            <input type="file" id="copy_id_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
+            <input
+              type="file"
+              id="copy_id_heir"
+              name='id_card'
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
+              onChange={handleChange}
+              required
+            />
           </div>
 
           <div class='mt-5'>
             <label for="doc_rename_heir" class="block mb-2 text-sm font-medium text-gray-900">ใบเปลี่ยนชื่อ</label>
-            <input type="file" id="doc_rename_heir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5" placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
+            <input
+              type="file"
+              id="doc_rename_heir"
+              name='rename_doc'
+              onChange={handleChange}
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
           </div>
         </div>
       </div>
@@ -556,6 +949,27 @@ function Register() {
 
   const [step, setStep] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({});
+  const handleSubmit = async() =>{
+    try{
+      const formDataToSubmit = new FormData();
+
+      Object.keys(formData).forEach(key => {
+        formDataToSubmit.append(key, formData[key]);
+      });
+      const response = await createCandidate(formDataToSubmit);
+
+      if (response.success) {
+        alert('ได้ละจ้า')
+      }else {
+        alert('ไม่ได้อีกละสัส')
+      }
+    }catch(error){
+      console.error('Fail:', error)
+      alert('error ตอนอัป')
+  }
+}
+
 
   const handleNext = () => {
     setStep((prevStep) => prevStep + 1);
@@ -581,7 +995,7 @@ function Register() {
     <div>
       <nav class="bg-white">
         <div class="max-w-screen-3xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <img src="logo.png" class="h-16" alt="Logo" />
+          <img src="logo.png" class="h-16" alt="Logo" />
         </div>
       </nav>
 
@@ -592,8 +1006,8 @@ function Register() {
               <div className='ibm-plex-sans-thai-medium'>
                 <div class="text-center text-3xl text-black mb-8 font-bold">ลงทะเบียนชมรมผู้สูงอายุ</div>
 
-                {step === 1 && <RegisterPage1 />}
-                {step === 2 && <RegisterPage2 />}
+                {step === 1 && <RegisterPage1 formData={formData} setFormData={setFormData}/>}
+                {step === 2 && <RegisterPage2 formData={formData} setFormData={setFormData}/>}
 
                 {/* back กับ next */}
                 <div className="mt-14">
@@ -687,6 +1101,7 @@ function Register() {
                                     <p className="mb-5 text-base font-normal text-gray-800 dark:text-gray-800">โปรดตรวจสอบข้อมูลให้ถูกต้องก่อนกดยืนยัน</p>
                                     <button
                                       onClick={ConfirmModal}
+                                      onSubmit={handleSubmit}
                                       className="text-white text-gray-900 focus:outline-none bg-white rounded-lg border border-lime-200 hover:bg-lime-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-lime-100 dark:focus:ring-lime-600 dark:bg-lime-700 dark:text-lime-400 dark:border-lime-500 dark:hover:text-white dark:hover:bg-lime-600 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
                                     >
                                       ยืนยัน
@@ -720,4 +1135,5 @@ function Register() {
   )
 }
 
-export default Register
+
+export default Register();

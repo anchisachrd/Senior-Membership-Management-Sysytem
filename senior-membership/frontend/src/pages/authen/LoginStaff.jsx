@@ -12,6 +12,7 @@ function LoginStaff() {
           <div class="2xl:flex">
             <div className='ibm-plex-sans-thai-medium'>
               <div class="p-8 bg-gray-50 overflow-hidden rounded-xl shadow-xl">
+
                 <div class='place-items-center'>
                   <img src="logo.png" class="h-16" alt="Logo ja" />
                 </div>
@@ -52,8 +53,6 @@ function LoginStaff() {
         </div>
       </div>
     </div>
-
-
 
   )
 }

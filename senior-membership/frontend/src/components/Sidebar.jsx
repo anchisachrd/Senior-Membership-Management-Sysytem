@@ -4,6 +4,7 @@ import { IoNotificationsOutline, IoDocumentTextOutline, IoHomeOutline } from "re
 import { AiOutlineHistory } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { TiDocumentText } from "react-icons/ti";
+import { Link } from "react-router";
 
 function Sidebar() {
   // const role = 'member';
