@@ -14,6 +14,8 @@ export const createCandidateData = async (req, res) => {
             phone,
             gender,
             occupation,
+            email,
+            password,
             address,
             document,
             account,
