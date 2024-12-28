@@ -1,493 +1,492 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { Link } from "react-router";
-import { createCandidate } from '../../api/candidateApi.js';
+// Import the API helper
+import { createCandidate } from "../../api/candidateApi";
 
+// =============== STEP 1: Candidate Page ===============
 function RegisterPage1({ formData, setFormData }) {
-
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: files ? files[0] : value
+      [name]: files ? files[0] : value,
     }));
   };
+
   return (
     <div>
-      {/* กล่อง register 1 */}
-      <div class="bg-gray-50 overflow-hidden rounded-xl shadow-xl">
-        <div class="p-8">
-          <p class="block mt-1 mb-7 text-xl leading-tight font-bold text-grey-600">1. ข้อมูลส่วนตัวของผู้สมัคร</p>
+      <div className="bg-gray-50 overflow-hidden rounded-xl shadow-xl">
+        <div className="p-8">
+          <p className="block mt-1 mb-7 text-xl font-bold text-grey-600">
+            1. ข้อมูลส่วนตัวของผู้สมัคร
+          </p>
 
-          <div class="grid gap-6 mb-6 md:grid-cols-3">
+          <div className="grid gap-6 mb-6 md:grid-cols-3">
+            {/* Title */}
             <div>
-              <label for="title_name_member" class="block mb-2 text-sm font-medium text-gray-900">คำนำหน้า</label>
+              <label htmlFor="candidate_title" className="block mb-2 text-sm font-medium text-gray-900">
+                คำนำหน้า
+              </label>
               <select
-                name="title"
-                values={formData.title || ''}
+                name="candidate_title"
+                value={formData.candidate_title || ""}
                 onChange={handleChange}
-                id="title_name_member"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                id="candidate_title"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2"
                 required
               >
-                <option selected>เลือกคำนำหน้า</option>
+                <option value="">เลือกคำนำหน้า</option>
                 <option value="mr">นาย</option>
                 <option value="miss">นางสาว</option>
                 <option value="mrs">นาง</option>
               </select>
             </div>
 
+            {/* First Name */}
             <div>
-              <label for="first_name_member" class="block mb-2 text-sm font-medium text-gray-900 ">ชื่อจริง</label>
+              <label htmlFor="candidate_first_name" className="block mb-2 text-sm font-medium text-gray-900">
+                ชื่อจริง
+              </label>
               <input
                 type="text"
-                name='first_name'
+                name="candidate_first_name"
+                value={formData.candidate_first_name || ""}
                 onChange={handleChange}
-                values={formData.first_name || ''}
-                id="first_name_member"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                id="candidate_first_name"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 placeholder="กรอกชื่อของผู้สมัคร"
                 required
               />
             </div>
 
+            {/* Last Name */}
             <div>
-              <label for="last_name_member" class="block mb-2 text-sm font-medium text-gray-900 ">นามสกุล</label>
+              <label htmlFor="candidate_last_name" className="block mb-2 text-sm font-medium text-gray-900">
+                นามสกุล
+              </label>
               <input
                 type="text"
-                name='last_name'
+                name="candidate_last_name"
+                value={formData.candidate_last_name || ""}
                 onChange={handleChange}
-                values={formData.last_name || ''}
-                id="last_name_member"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                id="candidate_last_name"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 placeholder="กรอกนามสกุลของผู้สมัคร"
                 required
               />
             </div>
 
+            {/* National ID */}
             <div>
-              <label for="id_number_member" class="block mb-2 text-sm font-medium text-gray-900 ">เลขบัตรประชาชน</label>
+              <label htmlFor="candidate_national_id" className="block mb-2 text-sm font-medium text-gray-900">
+                เลขบัตรประชาชน
+              </label>
               <input
                 type="text"
-                name='national_id'
+                name="candidate_national_id"
+                value={formData.candidate_national_id || ""}
                 onChange={handleChange}
-                values={formData.national_id || ''}
-                id="id_number_member"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                id="candidate_national_id"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 placeholder="กรอกเลขบัตรประชาชน"
                 required
               />
             </div>
 
+            {/* DOB */}
             <div>
-              <label for="birth_day_member" class="block mb-2 text-sm font-medium text-gray-900 ">วัน/เดือน/ปี เกิด</label>
+              <label htmlFor="candidate_dob" className="block mb-2 text-sm font-medium text-gray-900">
+                วัน/เดือน/ปี เกิด
+              </label>
               <input
-                id="birth_day_member"
-                onChange={handleChange}
-                name='dob'
-                values={formData.dob || ''}
+                id="candidate_dob"
+                name="candidate_dob"
                 type="date"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="เลือกวันเกิด"
+                value={formData.candidate_dob || ""}
+                onChange={handleChange}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 required
               />
             </div>
 
+            {/* Gender */}
             <div>
-              <label for="sex_member" class="block mb-2 text-sm font-medium text-gray-900">เพศ</label>
+              <label htmlFor="candidate_gender" className="block mb-2 text-sm font-medium text-gray-900">
+                เพศ
+              </label>
               <select
-                id="sex_member"
-                name='gender'
-                values={formData.gender || ''}
+                id="candidate_gender"
+                name="candidate_gender"
+                value={formData.candidate_gender || ""}
                 onChange={handleChange}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2"
                 required
               >
-                <option selected class='text-opacity-25'>เลือกเพศ</option>
+                <option value="">เลือกเพศ</option>
                 <option value="M">ชาย</option>
                 <option value="F">หญิง</option>
               </select>
             </div>
-
           </div>
 
-          <div class="grid gap-6 mb-4 md:grid-cols-2">
+          {/* Occupation & Phone */}
+          <div className="grid gap-6 mb-4 md:grid-cols-2">
             <div>
-              <label for="job_member" class="block mb-2 text-sm font-medium text-gray-900">อาชีพ</label>
+              <label htmlFor="candidate_occupation" className="block mb-2 text-sm font-medium text-gray-900">
+                อาชีพ
+              </label>
               <select
-                id="job_member"
-                name='occupation'
-                values={formData.occupation || ''}
+                id="candidate_occupation"
+                name="candidate_occupation"
+                value={formData.candidate_occupation || ""}
                 onChange={handleChange}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2"
                 required
               >
-                <option selected>เลือกอาชีพ</option>
-                <option value="1">อาชีพ 1</option>
-                <option value="2">อาชีพ 2</option>
-                <option value="3">อาชีพ 3</option>
+                <option value="">เลือกอาชีพ</option>
+                <option value="อาชีพ1">อาชีพ 1</option>
+                <option value="อาชีพ2">อาชีพ 2</option>
+                <option value="อาชีพ3">อาชีพ 3</option>
               </select>
             </div>
 
-            <div >
-              <label for="phone_member" class="block mb-2 text-sm font-medium text-gray-900 ">หมายเลขโทรศัพท์</label>
+            <div>
+              <label htmlFor="candidate_phone" className="block mb-2 text-sm font-medium text-gray-900">
+                หมายเลขโทรศัพท์
+              </label>
               <input
                 type="text"
-                name='phone'
-                values={formData.phone || ''}
+                name="candidate_phone"
+                value={formData.candidate_phone || ""}
                 onChange={handleChange}
-                id="phone_member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                id="candidate_phone"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 placeholder="กรอกหมายเลขโทรศัพท์"
                 required
               />
             </div>
-
           </div>
 
-          <div class='mb-4'>
-            <label for="email_member" class="block mb-2 text-sm font-medium text-gray-900 ">อีเมล</label>
+          {/* Email */}
+          <div className="mb-4">
+            <label htmlFor="candidate_email" className="block mb-2 text-sm font-medium text-gray-900">
+              อีเมล
+            </label>
             <input
-              type="text"
-              name='email'
-              id="email_member"
-              values={formData.email || ''}
+              type="email"
+              name="candidate_email"
+              id="candidate_email"
+              value={formData.candidate_email || ""}
               onChange={handleChange}
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               placeholder="กรอกอีเมลของผู้สมัคร"
               required
             />
           </div>
 
-          <div class="grid gap-6 mb-4 md:grid-cols-2">
-
+          {/* Password / Confirm Password */}
+          <div className="grid gap-6 mb-4 md:grid-cols-2">
             <div>
-              <label for="password_member" class="block mb-2 text-sm font-medium text-gray-900 ">รหัสผ่าน</label>
+              <label htmlFor="candidate_password" className="block mb-2 text-sm font-medium text-gray-900">
+                รหัสผ่าน
+              </label>
               <input
                 type="password"
-                name='password'
-                id="password_member"
+                name="candidate_password"
+                id="candidate_password"
+                value={formData.candidate_password || ""}
                 onChange={handleChange}
-                values={formData.password || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 placeholder="กรอกรหัสผ่าน"
                 required
               />
             </div>
-
             <div>
-              <label for="confirm_password_member" class="block mb-2 text-sm font-medium text-gray-900 ">ยืนยันรหัสผ่าน</label>
+              <label htmlFor="candidate_confirm_password" className="block mb-2 text-sm font-medium text-gray-900">
+                ยืนยันรหัสผ่าน
+              </label>
               <input
                 type="password"
-                id="confirm_password_member"
-
-                onChange={handleChange}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                name="candidate_confirm_password"
+                id="candidate_confirm_password"
+                
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 placeholder="กรอกรหัสผ่านให้ตรงกัน"
                 required
               />
             </div>
-
           </div>
 
-          <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-500"></hr>
+          <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-500" />
 
-          {/* ที่อยู่ */}
-          <p class="block mb-5 mt-0 text-base leading-tight font-bold text-grey-600">ที่อยู่ปัจจุบัน</p>
+          {/* Address */}
+          <p className="block mb-5 text-base font-bold text-grey-600">ที่อยู่ปัจจุบัน</p>
 
-          <div class="grid gap-6 mb-5 md:grid-cols-3">
-
-            <div >
-              <label for="home_number_member" class="block mb-2 text-sm font-medium text-gray-900 ">บ้านเลขที่</label>
+          {/* HouseNumber, Moo, Soi */}
+          <div className="grid gap-6 mb-5 md:grid-cols-3">
+            <div>
+              <label htmlFor="candidate_house_number" className="block mb-2 text-sm font-medium text-gray-900">
+                บ้านเลขที่
+              </label>
               <input
                 type="text"
-                name='house_num'
-                id="home_number_member"
-                values={formData.house_num || ''}
+                name="candidate_house_number"
+                id="candidate_house_number"
+                value={formData.candidate_house_number || ""}
                 onChange={handleChange}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกบ้านเลขที่"
-
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               />
             </div>
-
-            <div >
-              <label for="moo_member" class="block mb-2 text-sm font-medium text-gray-900 ">หมู่ที่</label>
+            <div>
+              <label htmlFor="candidate_moo" className="block mb-2 text-sm font-medium text-gray-900">
+                หมู่ที่
+              </label>
               <input
                 type="text"
-                name='moo'
-                values={formData.moo || ''}
-                id="moo_member"
+                name="candidate_moo"
+                id="candidate_moo"
+                value={formData.candidate_moo || ""}
                 onChange={handleChange}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกหมู่ที่"
-
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               />
             </div>
-
-            <div >
-              <label for="soi_member" class="block mb-2 text-sm font-medium text-gray-900 ">ซอย</label>
+            <div>
+              <label htmlFor="candidate_soi" className="block mb-2 text-sm font-medium text-gray-900">
+                ซอย
+              </label>
               <input
                 type="text"
-                name='soi'
-                values={formData.soi || ''}
+                name="candidate_soi"
+                id="candidate_soi"
+                value={formData.candidate_soi || ""}
                 onChange={handleChange}
-                id="soi_member"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกซอย"
-
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               />
             </div>
-
           </div>
 
-          <div class="grid gap-6 mb-4 md:grid-cols-2">
-
-            <div >
-              <label for="road_member" class="block mb-2 text-sm font-medium text-gray-900 ">ถนน</label>
+          {/* Street, Subdistrict, District, Province, Postal */}
+          <div className="grid gap-6 mb-4 md:grid-cols-2">
+            <div>
+              <label htmlFor="candidate_street" className="block mb-2 text-sm font-medium text-gray-900">
+                ถนน
+              </label>
               <input
                 type="text"
-                name='street'
-                values={formData.street || ''}
+                name="candidate_street"
+                id="candidate_street"
+                value={formData.candidate_street || ""}
                 onChange={handleChange}
-                id="road_member"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกถนน"
-
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               />
             </div>
-
-            <div >
-              <label for="sub_district_member" class="block mb-2 text-sm font-medium text-gray-900 ">ตำบล/แขวง</label>
+            <div>
+              <label htmlFor="candidate_subdistrict" className="block mb-2 text-sm font-medium text-gray-900">
+                ตำบล/แขวง
+              </label>
               <input
                 type="text"
-                name='subdistrict'
-                values={formData.sundistrict || ''}
+                name="candidate_subdistrict"
+                id="candidate_subdistrict"
+                value={formData.candidate_subdistrict || ""}
                 onChange={handleChange}
-                id="sub_district_member"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกตำบลหรือแขวง"
-                required
-              />
-            </div>
-
-            <div >
-              <label for="district_member" class="block mb-2 text-sm font-medium text-gray-900 ">อำเภอ/เขต</label>
-              <input
-                type="text"
-                id="district_member"
-                values={formData.district || ''}
-                onChange={handleChange}
-                name='district'
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกอำเภอหรือเขต"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 required
               />
             </div>
 
             <div>
-              <label for="province_member" class="block mb-2 text-sm font-medium text-gray-900">จังหวัด</label>
-              <select
-                id="province_member"
-                name='province'
-                values={formData.province || ''}
+              <label htmlFor="candidate_district" className="block mb-2 text-sm font-medium text-gray-900">
+                อำเภอ/เขต
+              </label>
+              <input
+                type="text"
+                name="candidate_district"
+                id="candidate_district"
+                value={formData.candidate_district || ""}
                 onChange={handleChange}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="candidate_province" className="block mb-2 text-sm font-medium text-gray-900">
+                จังหวัด
+              </label>
+              <select
+                id="candidate_province"
+                name="candidate_province"
+                value={formData.candidate_province || ""}
+                onChange={handleChange}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2"
                 required
               >
-                <option selected>เลือกจังหวัด</option>
-                <option value="1">กระบี่</option>
-                <option value="2">กรุงเทพมหานคร</option>
-                <option value="3">กาญจนบุรี</option>
-                <option value="4">กาฬสินธุ์</option>
-                <option value="5">กำแพงเพชร</option>
-                <option value="6">ขอนแก่น</option>
-                <option value="7">จันทบุรี</option>
-                <option value="8">ฉะเชิงเทรา</option>
-                <option value="9">ชลบุรี</option>
-                <option value="10">ชัยนาท</option>
-                <option value="11">ชัยภูมิ</option>
-                <option value="12">ชุมพร</option>
-                <option value="13">เชียงราย</option>
-                <option value="14">เชียงใหม่</option>
-                <option value="15">ตรัง</option>
-                <option value="16">ตราด</option>
-                <option value="17">ตาก</option>
-                <option value="18">นครนายก</option>
-                <option value="19">นครปฐม</option>
-                <option value="20">นครพนม</option>
-                <option value="21">นครราชสีมา</option>
-                <option value="22">นครศรีธรรมราช</option>
-                <option value="23">นครสวรรค์</option>
-                <option value="24">นนทบุรี</option>
-                <option value="25">นราธิวาส</option>
-                <option value="26">น่าน</option>
-                <option value="27">บึงกาฬ</option>
-                <option value="28">บุรีรัมย์</option>
-                <option value="29">ปทุมธานี</option>
-                <option value="30">ประจวบคีรีขันธ์</option>
-                <option value="31">ปราจีนบุรี</option>
-                <option value="32">ปัตตานี</option>
-                <option value="33">พระนครศรีอยุธยา</option>
-                <option value="34">พะเยา</option>
-                <option value="35">พังงา</option>
-                <option value="36">พัทลุง</option>
-                <option value="37">พิจิตร</option>
-                <option value="38">พิษณุโลก</option>
-                <option value="39">เพชรบุรี</option>
-                <option value="40">เพชรบูรณ์</option>
-                <option value="41">แพร่</option>
-                <option value="42">ภูเก็ต</option>
-                <option value="43">มหาสารคาม</option>
-                <option value="44">มุกดาหาร</option>
-                <option value="45">แม่ฮ่องสอน</option>
-                <option value="46">ยโสธร</option>
-                <option value="47">ยะลา</option>
-                <option value="48">ร้อยเอ็ด</option>
-                <option value="49">ระนอง</option>
-                <option value="50">ระยอง</option>
-                <option value="51">ราชบุรี</option>
-                <option value="52">ลพบุรี</option>
-                <option value="53">ลำปาง</option>
-                <option value="54">ลำพูน</option>
-                <option value="55">เลย</option>
-                <option value="56">ศรีสะเกษ</option>
-                <option value="57">สกลนคร</option>
-                <option value="58">สงขลา</option>
-                <option value="59">สตูล</option>
-                <option value="60">สมุทรปราการ</option>
-                <option value="61">สมุทรสงคราม</option>
-                <option value="62">สมุทรสาคร</option>
-                <option value="63">สระแก้ว</option>
-                <option value="64">สระบุรี</option>
-                <option value="65">สิงห์บุรี</option>
-                <option value="66">สุโขทัย</option>
-                <option value="67">สุพรรณบุรี</option>
-                <option value="68">สุราษฎร์ธานี</option>
-                <option value="69">สุรินทร์</option>
-                <option value="70">หนองคาย</option>
-                <option value="71">หนองบัวลำภู</option>
-                <option value="72">อ่างทอง</option>
-                <option value="73">อำนาจเจริญ</option>
-                <option value="74">อุดรธานี</option>
-                <option value="75">อุตรดิตถ์</option>
-                <option value="76">อุทัยธานี</option>
-                <option value="77">อุบลราชธานี</option>
+                <option value="">เลือกจังหวัด</option>
+                <option value="กรุงเทพฯ">กรุงเทพมหานคร</option>
+                <option value="เชียงใหม่">เชียงใหม่</option>
+                <option value="ภูเก็ต">ภูเก็ต</option>
+                
               </select>
             </div>
           </div>
 
-          <div class="grid gap-6 mb-3 md:grid-cols-2">
-
-            <div >
-              <label for="zip_member" class="block mb-2 text-sm font-medium text-gray-900 ">รหัสไปรษณีย์</label>
+          {/* Postal Code */}
+          <div className="grid gap-6 mb-3 md:grid-cols-2">
+            <div>
+              <label htmlFor="candidate_postal_code" className="block mb-2 text-sm font-medium text-gray-900">
+                รหัสไปรษณีย์
+              </label>
               <input
                 type="text"
-                name='postal_code'
-                id="zip_member"
-                values={formData.postal_code || ''}
+                name="candidate_postal_code"
+                id="candidate_postal_code"
+                value={formData.candidate_postal_code || ""}
                 onChange={handleChange}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกรหัสไปรษณีย์"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 required
               />
             </div>
           </div>
-
-
-
-
         </div>
       </div>
 
-      {/* กล่อง register 2 */}
-      <div class="bg-gray-50 overflow-hidden rounded-xl shadow-xl mt-14">
-        <div class="p-8">
-          <p class="block mt-1 mb-7 text-xl leading-tight font-bold text-grey-600">2. เอกสารของผู้สมัคร</p>
+      {/* เอกสารของผู้สมัคร */}
+      <div className="bg-gray-50 overflow-hidden rounded-xl shadow-xl mt-14">
+        <div className="p-8">
+          <p className="block mt-1 mb-7 text-xl font-bold text-grey-600">
+            2. เอกสารของผู้สมัคร
+          </p>
 
+          {/* House Registration */}
           <div>
-            <label for="copy_house_member" class="block mb-2 text-sm font-medium text-gray-900">สำเนาทะเบียนบ้าน</label>
+            <label htmlFor="candidate_house_registration" className="block mb-2 text-sm font-medium text-gray-900">
+              สำเนาทะเบียนบ้าน
+            </label>
             <input
               type="file"
-              name='house_registration'
-              id="copy_house_member"
+              name="candidate_house_registration"
+              id="candidate_house_registration"
               onChange={handleChange}
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               required
             />
           </div>
 
-          <div class='mt-5'>
-            <label for="copy_id_member" class="block mb-2 text-sm font-medium text-gray-900">สำเนาบัตรประชาชน</label>
+          {/* ID Card */}
+          <div className="mt-5">
+            <label htmlFor="candidate_id_card" className="block mb-2 text-sm font-medium text-gray-900">
+              สำเนาบัตรประชาชน
+            </label>
             <input
               type="file"
-              id="copy_id_member"
-              name='id_card'
+              name="candidate_id_card"
+              id="candidate_id_card"
               onChange={handleChange}
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               required
             />
           </div>
 
-          <div class='mt-5'>
-            <label for="doc_rename_member" class="block mb-2 text-sm font-medium text-gray-900">ใบเปลี่ยนชื่อ</label>
+          {/* Rename Doc */}
+          <div className="mt-5">
+            <label htmlFor="candidate_rename_doc" className="block mb-2 text-sm font-medium text-gray-900">
+              ใบเปลี่ยนชื่อ
+            </label>
             <input
               type="file"
-              id="doc_rename_member"
-              name='rename_doc'
+              name="candidate_rename_doc"
+              id="candidate_rename_doc"
               onChange={handleChange}
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
-
-          </div>
-
-          <div class='mt-5'>
-            <label for="cer_med_member" class="block mb-2 text-sm font-medium text-gray-900">ใบรับรองแพทย์</label>
-            <input
-              type="file"
-              id="cer_med_member"
-              name='med_certification'
-              onChange={handleChange}
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
-              required
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
             />
           </div>
 
+          {/* Medical Certification */}
+          <div className="mt-5">
+            <label htmlFor="candidate_med_certification" className="block mb-2 text-sm font-medium text-gray-900">
+              ใบรับรองแพทย์
+            </label>
+            <input
+              type="file"
+              name="candidate_med_certification"
+              id="candidate_med_certification"
+              onChange={handleChange}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+              required
+            />
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
+// =============== STEP 2: Heir Page ===============
 function RegisterPage2({ formData, setFormData }) {
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: files ? files[0] : value
-    }));
+    const { name, value, files, type, checked } = e.target;
+
+
+
+
+    // เช็คว่าที่อยู่เดียวกันมั้ย ถ้าที่อยู่เกี่ยวกันเวลากดมันจะเอาข้อมูลที่อยู่ฝั่ง candidate มาให้เลย + disable input ให้กรอกไม่ได้
+    if (type === "checkbox" && name === "sameAddress") {
+      if (checked) {
+        setFormData((prev) => ({
+          ...prev,
+          sameAddress: true,
+          heir_house_number: prev.candidate_house_number,
+          heir_moo: prev.candidate_moo,
+          heir_soi: prev.candidate_soi,
+          heir_street: prev.candidate_street,
+          heir_subdistrict: prev.candidate_subdistrict,
+          heir_district: prev.candidate_district,
+          heir_province: prev.candidate_province,
+          heir_postal_code: prev.candidate_postal_code,
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          sameAddress: false,
+        }));
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files ? files[0] : value,
+      }));
+
+
+    }
   };
+
+  const isSameAddress = !!formData.sameAddress;
+
   return (
     <div>
-      {/* กล่อง register 3 */}
-      <div class="bg-gray-50 overflow-hidden rounded-xl shadow-xl">
-        <div class="p-8">
-          <p class="block mt-1 mb-7 text-xl leading-tight font-bold text-grey-600">3. ข้อมูลส่วนตัวของทายาท</p>
+      {/* ข้อมูลส่วนตัวของทายาท */}
+      <div className="bg-gray-50 overflow-hidden rounded-xl shadow-xl">
+        <div className="p-8">
+          <p className="block mt-1 mb-7 text-xl font-bold text-grey-600">
+            3. ข้อมูลส่วนตัวของทายาท
+          </p>
 
-          <div class="grid gap-6 mb-6 md:grid-cols-3">
+          {/* Heir Title, First Name, Last Name */}
+          <div className="grid gap-6 mb-6 md:grid-cols-3">
             <div>
-              <label for="title_name_heir" class="block mb-2 text-sm font-medium text-gray-900">คำนำหน้า</label>
+              <label htmlFor="heir_title" className="block mb-2 text-sm font-medium text-gray-900">
+                คำนำหน้า
+              </label>
               <select
-                id="title_name_heir"
-                name='title'
+                id="heir_title"
+                name="heir_title"
+                value={formData.heir_title || ""}
                 onChange={handleChange}
-                values={formData.title || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2"
                 required
               >
-                <option selected>เลือกคำนำหน้า</option>
+                <option value="">เลือกคำนำหน้า</option>
                 <option value="mr">นาย</option>
                 <option value="miss">นางสาว</option>
                 <option value="mrs">นาง</option>
@@ -495,529 +494,524 @@ function RegisterPage2({ formData, setFormData }) {
             </div>
 
             <div>
-              <label for="first_name_heir" class="block mb-2 text-sm font-medium text-gray-900 ">ชื่อจริง</label>
+              <label htmlFor="heir_first_name" className="block mb-2 text-sm font-medium text-gray-900">
+                ชื่อจริง
+              </label>
               <input
                 type="text"
-                id="first_name_heir"
-                name='first_name'
+                id="heir_first_name"
+                name="heir_first_name"
+                value={formData.heir_first_name || ""}
                 onChange={handleChange}
-                values={formData.first_name || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 placeholder="กรอกชื่อของทายาท"
                 required
               />
             </div>
 
             <div>
-              <label for="last_name_heir" class="block mb-2 text-sm font-medium text-gray-900 ">นามสกุล</label>
+              <label htmlFor="heir_last_name" className="block mb-2 text-sm font-medium text-gray-900">
+                นามสกุล
+              </label>
               <input
                 type="text"
-                id="last_name_heir"
-                name='last_name'
+                id="heir_last_name"
+                name="heir_last_name"
+                value={formData.heir_last_name || ""}
                 onChange={handleChange}
-                values={formData.last_name || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกนามสกุลของทายาท"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 required
               />
             </div>
 
+            {/* Heir National ID, DOB, Gender */}
             <div>
-              <label for="id_number_heir" class="block mb-2 text-sm font-medium text-gray-900 ">เลขบัตรประชาชน</label>
+              <label htmlFor="heir_national_id" className="block mb-2 text-sm font-medium text-gray-900">
+                เลขบัตรประชาชน
+              </label>
               <input
                 type="text"
-                id="id_number_heir"
-                name='national_id'
+                id="heir_national_id"
+                name="heir_national_id"
+                value={formData.heir_national_id || ""}
                 onChange={handleChange}
-                values={formData.national_id || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกเลขบัตรประชาชน"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 required
               />
             </div>
-
             <div>
-              <label for="birth_day_heir" class="block mb-2 text-sm font-medium text-gray-900 ">วัน/เดือน/ปี เกิด</label>
+              <label htmlFor="heir_dob" className="block mb-2 text-sm font-medium text-gray-900">
+                วัน/เดือน/ปี เกิด
+              </label>
               <input
-                id="birth_day_heir"
-                name='dob'
+                id="heir_dob"
+                name="heir_dob"
                 type="date"
+                value={formData.heir_dob || ""}
                 onChange={handleChange}
-                values={formData.dob || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="เลือกวันเกิด"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 required
               />
             </div>
-
             <div>
-              <label for="sex_heir" class="block mb-2 text-sm font-medium text-gray-900">เพศ</label>
+              <label htmlFor="heir_gender" className="block mb-2 text-sm font-medium text-gray-900">
+                เพศ
+              </label>
               <select
-                id="sex_heir"
-                name='gender'
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                id="heir_gender"
+                name="heir_gender"
+                value={formData.heir_gender || ""}
                 onChange={handleChange}
-                values={formData.gender || ''}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2"
                 required
               >
-                <option selected class='text-opacity-25'>เลือกเพศ</option>
-                <option value="man">ชาย</option>
-                <option value="woman">หญิง</option>
+                <option value="">เลือกเพศ</option>
+                <option value="M">ชาย</option>
+                <option value="F">หญิง</option>
               </select>
             </div>
-
           </div>
 
-          <div class="grid gap-6 mb-3 md:grid-cols-2">
+          {/* Heir Occupation, Relationship, Phone, Email */}
+          <div className="grid gap-6 mb-3 md:grid-cols-2">
             <div>
-              <label for="job_heir" class="block mb-2 text-sm font-medium text-gray-900">อาชีพ</label>
+              <label htmlFor="heir_occupation" className="block mb-2 text-sm font-medium text-gray-900">
+                อาชีพ
+              </label>
               <select
-                id="job_heir"
-                name='occupation'
+                id="heir_occupation"
+                name="heir_occupation"
+                value={formData.heir_occupation || ""}
                 onChange={handleChange}
-                values={formData.occupation || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2"
                 required
               >
-                <option selected>เลือกอาชีพ</option>
+                <option value="">เลือกอาชีพ</option>
                 <option value="1">อาชีพ 1</option>
                 <option value="2">อาชีพ 2</option>
-                <option value="3">อาชีพ 3</option>
               </select>
             </div>
 
             <div>
-              <label for="relationship_heir" class="block mb-2 text-sm font-medium text-gray-900">ความเกี่ยวข้อง</label>
+              <label htmlFor="heir_relationship" className="block mb-2 text-sm font-medium text-gray-900">
+                ความเกี่ยวข้อง
+              </label>
               <select
-                id="relationship_heir"
-                name='relationship'
+                id="heir_relationship"
+                name="heir_relationship"
+                value={formData.heir_relationship || ""}
                 onChange={handleChange}
-                values={formData.relationship || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2"
                 required
               >
-                <option selected>เลือกความเกี่ยวข้อง</option>
+                <option value="">เลือกความเกี่ยวข้อง</option>
                 <option value="1">สามี/ภรรยา</option>
                 <option value="2">ลูก</option>
-                <option value="3">บลาๆ</option>
+                <option value="3">อื่นๆ</option>
               </select>
             </div>
 
             <div>
-              <label for="phone_heir" class="block mb-2 text-sm font-medium text-gray-900 ">หมายเลขโทรศัพท์</label>
+              <label htmlFor="heir_phone" className="block mb-2 text-sm font-medium text-gray-900">
+                หมายเลขโทรศัพท์
+              </label>
               <input
                 type="text"
-                id="phone_heir"
-                name='phone'
+                id="heir_phone"
+                name="heir_phone"
+                value={formData.heir_phone || ""}
                 onChange={handleChange}
-                values={formData.phone || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกหมายเลขโทรศัพท์"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 required
               />
             </div>
 
             <div>
-              <label for="email_heir" class="block mb-2 text-sm font-medium text-gray-900 ">อีเมล</label>
+              <label htmlFor="heir_email" className="block mb-2 text-sm font-medium text-gray-900">
+                อีเมล
+              </label>
               <input
-                type="text"
-                id="email_heir"
-                name='email'
+                type="email"
+                id="heir_email"
+                name="heir_email"
+                value={formData.heir_email || ""}
                 onChange={handleChange}
-                values={formData.email || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกอีเมลของทายาท"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 required
               />
             </div>
-
-            <div>
-              <label for="password_heir" class="block mb-2 text-sm font-medium text-gray-900 ">รหัสผ่าน</label>
-              <input
-                type="password"
-                id="password_heir"
-                name='password'
-                onChange={handleChange}
-                values={formData.password || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกรหัสผ่าน"
-                required
-              />
-            </div>
-
-            <div>
-              <label for="confirm_password_heir" class="block mb-2 text-sm font-medium text-gray-900 ">ยืนยันรหัสผ่าน</label>
-              <input
-                type="password"
-                id="confirm_password_heir"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกรหัสผ่านให้ตรงกัน"
-                required
-              />
-            </div>
-
           </div>
 
-          <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-500"></hr>
+          <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-500" />
 
-          {/* ที่อยู่ */}
-          <p class="block mb-5 mt-0 text-base leading-tight font-bold text-grey-600">ที่อยู่ปัจจุบัน</p>
 
-          <div class="grid gap-6 mb-5 md:grid-cols-3">
-
-            <div >
-              <label for="home_number_member" class="block mb-2 text-sm font-medium text-gray-900 ">บ้านเลขที่</label>
+          {/* ที่อยู่ของทายาท */}
+          <p className="block mb-5 text-base font-bold text-grey-600">ที่อยู่ปัจจุบัน</p>
+          {/* Checkbox - same address */}
+          <div className="mb-5">
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                name="sameAddress"
+                checked={isSameAddress}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              <span className="text-sm font-bold text-gray-900">
+                ที่อยู่ปัจจุบันเหมือนกับผู้สมัคร
+              </span>
+            </label>
+          </div>
+          <div className="grid gap-6 mb-5 md:grid-cols-3">
+            <div>
+              <label htmlFor="heir_house_number" className="block mb-2 text-sm font-medium text-gray-900">
+                บ้านเลขที่
+              </label>
               <input
                 type="text"
-                id="home_number_member"
-                name='house_num'
+                id="heir_house_number"
+                name="heir_house_number"
+                value={formData.heir_house_number || ""}
                 onChange={handleChange}
-                values={formData.house_num || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกบ้านเลขที่"
-
+                disabled={isSameAddress}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               />
             </div>
-
-            <div >
-              <label for="moo_member" class="block mb-2 text-sm font-medium text-gray-900 ">หมู่ที่</label>
+            <div>
+              <label htmlFor="heir_moo" className="block mb-2 text-sm font-medium text-gray-900">
+                หมู่ที่
+              </label>
               <input
                 type="text"
-                id="moo_member"
-                name='moo'
+                id="heir_moo"
+                name="heir_moo"
+                value={formData.heir_moo || ""}
                 onChange={handleChange}
-                values={formData.moo || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกหมู่ที่" />
-            </div>
-
-            <div >
-              <label for="soi_member" class="block mb-2 text-sm font-medium text-gray-900 ">ซอย</label>
-              <input
-                type="text"
-                id="soi_member"
-                name='soi'
-                onChange={handleChange}
-                values={formData.soi || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกซอย"
+                disabled={isSameAddress}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
               />
             </div>
-
+            <div>
+              <label htmlFor="heir_soi" className="block mb-2 text-sm font-medium text-gray-900">
+                ซอย
+              </label>
+              <input
+                type="text"
+                id="heir_soi"
+                name="heir_soi"
+                value={formData.heir_soi || ""}
+                onChange={handleChange}
+                disabled={isSameAddress}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+              />
+            </div>
           </div>
 
-          <div class="grid gap-6 mb-4 md:grid-cols-2">
-
-            <div >
-              <label for="road_member" class="block mb-2 text-sm font-medium text-gray-900 ">ถนน</label>
-              <input
-                type="text"
-                name='street'
-                id="road_member"
-                onChange={handleChange}
-                values={formData.street || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกถนน" />
-            </div>
-
-            <div >
-              <label for="sub_district_member" class="block mb-2 text-sm font-medium text-gray-900 ">ตำบล/แขวง</label>
-              <input
-                type="text"
-                name='sub_district'
-                id="sub_district_member"
-                onChange={handleChange}
-                values={formData.sundistrict || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกตำบลหรือแขวง"
-                required
-              />
-            </div>
-
-            <div >
-              <label for="district_member" class="block mb-2 text-sm font-medium text-gray-900 ">อำเภอ/เขต</label>
-              <input
-                type="text"
-                id="district_member"
-                name='district'
-                onChange={handleChange}
-                values={formData.district || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-                placeholder="กรอกอำเภอหรือเขต"
-                required
-              />
-            </div>
-
+          <div className="grid gap-6 mb-4 md:grid-cols-2">
             <div>
-              <label for="province_member" class="block mb-2 text-sm font-medium text-gray-900">จังหวัด</label>
+              <label htmlFor="heir_street" className="block mb-2 text-sm font-medium text-gray-900">
+                ถนน
+              </label>
+              <input
+                type="text"
+                id="heir_street"
+                name="heir_street"
+                value={formData.heir_street || ""}
+                onChange={handleChange}
+                disabled={isSameAddress}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+              />
+            </div>
+            <div>
+              <label htmlFor="heir_subdistrict" className="block mb-2 text-sm font-medium text-gray-900">
+                ตำบล/แขวง
+              </label>
+              <input
+                type="text"
+                id="heir_subdistrict"
+                name="heir_subdistrict"
+                value={formData.heir_subdistrict || ""}
+                onChange={handleChange}
+                disabled={isSameAddress}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="heir_district" className="block mb-2 text-sm font-medium text-gray-900">
+                อำเภอ/เขต
+              </label>
+              <input
+                type="text"
+                id="heir_district"
+                name="heir_district"
+                value={formData.heir_district || ""}
+                onChange={handleChange}
+                disabled={isSameAddress}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="heir_province" className="block mb-2 text-sm font-medium text-gray-900">
+                จังหวัด
+              </label>
               <select
-                id="province_member"
-                name='province'
+                id="heir_province"
+                name="heir_province"
+                value={formData.heir_province || ""}
                 onChange={handleChange}
-                values={formData.province || ''}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2"
+                disabled={isSameAddress}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2"
                 required
               >
-                <option selected>เลือกจังหวัด</option>
-                <option value="1">กระบี่</option>
-                <option value="2">กรุงเทพมหานคร</option>
-                <option value="3">กาญจนบุรี</option>
-                <option value="4">กาฬสินธุ์</option>
-                <option value="5">กำแพงเพชร</option>
-                <option value="6">ขอนแก่น</option>
-                <option value="7">จันทบุรี</option>
-                <option value="8">ฉะเชิงเทรา</option>
-                <option value="9">ชลบุรี</option>
-                <option value="10">ชัยนาท</option>
-                <option value="11">ชัยภูมิ</option>
-                <option value="12">ชุมพร</option>
-                <option value="13">เชียงราย</option>
-                <option value="14">เชียงใหม่</option>
-                <option value="15">ตรัง</option>
-                <option value="16">ตราด</option>
-                <option value="17">ตาก</option>
-                <option value="18">นครนายก</option>
-                <option value="19">นครปฐม</option>
-                <option value="20">นครพนม</option>
-                <option value="21">นครราชสีมา</option>
-                <option value="22">นครศรีธรรมราช</option>
-                <option value="23">นครสวรรค์</option>
-                <option value="24">นนทบุรี</option>
-                <option value="25">นราธิวาส</option>
-                <option value="26">น่าน</option>
-                <option value="27">บึงกาฬ</option>
-                <option value="28">บุรีรัมย์</option>
-                <option value="29">ปทุมธานี</option>
-                <option value="30">ประจวบคีรีขันธ์</option>
-                <option value="31">ปราจีนบุรี</option>
-                <option value="32">ปัตตานี</option>
-                <option value="33">พระนครศรีอยุธยา</option>
-                <option value="34">พะเยา</option>
-                <option value="35">พังงา</option>
-                <option value="36">พัทลุง</option>
-                <option value="37">พิจิตร</option>
-                <option value="38">พิษณุโลก</option>
-                <option value="39">เพชรบุรี</option>
-                <option value="40">เพชรบูรณ์</option>
-                <option value="41">แพร่</option>
-                <option value="42">ภูเก็ต</option>
-                <option value="43">มหาสารคาม</option>
-                <option value="44">มุกดาหาร</option>
-                <option value="45">แม่ฮ่องสอน</option>
-                <option value="46">ยโสธร</option>
-                <option value="47">ยะลา</option>
-                <option value="48">ร้อยเอ็ด</option>
-                <option value="49">ระนอง</option>
-                <option value="50">ระยอง</option>
-                <option value="51">ราชบุรี</option>
-                <option value="52">ลพบุรี</option>
-                <option value="53">ลำปาง</option>
-                <option value="54">ลำพูน</option>
-                <option value="55">เลย</option>
-                <option value="56">ศรีสะเกษ</option>
-                <option value="57">สกลนคร</option>
-                <option value="58">สงขลา</option>
-                <option value="59">สตูล</option>
-                <option value="60">สมุทรปราการ</option>
-                <option value="61">สมุทรสงคราม</option>
-                <option value="62">สมุทรสาคร</option>
-                <option value="63">สระแก้ว</option>
-                <option value="64">สระบุรี</option>
-                <option value="65">สิงห์บุรี</option>
-                <option value="66">สุโขทัย</option>
-                <option value="67">สุพรรณบุรี</option>
-                <option value="68">สุราษฎร์ธานี</option>
-                <option value="69">สุรินทร์</option>
-                <option value="70">หนองคาย</option>
-                <option value="71">หนองบัวลำภู</option>
-                <option value="72">อ่างทอง</option>
-                <option value="73">อำนาจเจริญ</option>
-                <option value="74">อุดรธานี</option>
-                <option value="75">อุตรดิตถ์</option>
-                <option value="76">อุทัยธานี</option>
-                <option value="77">อุบลราชธานี</option>
+                <option value="">เลือกจังหวัด</option>
+                <option value="กรุงเทพฯ">กรุงเทพมหานคร</option>
+                <option value="เชียงใหม่">เชียงใหม่</option>
+         
               </select>
             </div>
           </div>
 
-          <div class="grid gap-6 mb-3 md:grid-cols-2">
-
-            <div >
-              <label for="zip_member" class="block mb-2 text-sm font-medium text-gray-900 ">รหัสไปรษณีย์</label>
+          <div className="grid gap-6 mb-3 md:grid-cols-2">
+            <div>
+              <label htmlFor="heir_postal_code" className="block mb-2 text-sm font-medium text-gray-900">
+                รหัสไปรษณีย์
+              </label>
               <input
                 type="text"
-                name='postal_code'
-                id="zip_member"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
+                id="heir_postal_code"
+                name="heir_postal_code"
+                value={formData.heir_postal_code || ""}
                 onChange={handleChange}
-                values={formData.postal_code || ''}
-                placeholder="กรอกรหัสไปรษณีย์"
+                disabled={isSameAddress}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 required
               />
             </div>
           </div>
-
-
-
-
         </div>
       </div>
 
-
-
-      {/* กล่อง register 4 */}
-      <div class="bg-gray-50 overflow-hidden rounded-xl shadow-xl mt-14">
-        <div class="p-8">
-          <p class="block mt-1 mb-7 text-xl leading-tight font-bold text-grey-600">4. เอกสารของทายาท</p>
+      {/* เอกสารของทายาท */}
+      <div className="bg-gray-50 overflow-hidden rounded-xl shadow-xl mt-14">
+        <div className="p-8">
+          <p className="block mt-1 mb-7 text-xl font-bold text-grey-600">
+            4. เอกสารของทายาท
+          </p>
 
           <div>
-            <label for="copy_house_heir" class="block mb-2 text-sm font-medium text-gray-900">สำเนาทะเบียนบ้าน</label>
+            <label htmlFor="heir_house_registration" className="block mb-2 text-sm font-medium text-gray-900">
+              สำเนาทะเบียนบ้าน
+            </label>
             <input
               type="file"
-              id="copy_house_heir"
-              name='house_registration'
-              onChange={handleChange}
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
-              required
-              />
-           
-          </div>
+              id="heir_house_registration"
+              name="heir_house_registration"
 
-          <div class='mt-5'>
-            <label for="copy_id_heir" class="block mb-2 text-sm font-medium text-gray-900">สำเนาบัตรประชาชน</label>
-            <input
-              type="file"
-              id="copy_id_heir"
-              name='id_card'
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
               onChange={handleChange}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+
               required
             />
           </div>
 
-          <div class='mt-5'>
-            <label for="doc_rename_heir" class="block mb-2 text-sm font-medium text-gray-900">ใบเปลี่ยนชื่อ</label>
+          <div className="mt-5">
+            <label htmlFor="heir_id_card" className="block mb-2 text-sm font-medium text-gray-900">
+              สำเนาบัตรประชาชน
+            </label>
             <input
               type="file"
-              id="doc_rename_heir"
-              name='rename_doc'
+              id="heir_id_card"
+              name="heir_id_card"
+
               onChange={handleChange}
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร" />
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+              required
+            />
+          </div>
+
+          <div className="mt-5">
+            <label htmlFor="heir_rename_doc" className="block mb-2 text-sm font-medium text-gray-900">
+              ใบเปลี่ยนชื่อ
+            </label>
+            <input
+              type="file"
+              id="heir_rename_doc"
+              name="heir_rename_doc"
+
+              onChange={handleChange}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
+            />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
+// =============== STEP 3: Confirm Page ===============
 function Confirm() {
   return (
-    <div class='p-8'>
-      <div class="max-w-screen-lg mx-auto overflow-hidden md:max-w-3xl lg:max-w-3xl place-items-center">
-        <div class="2xl:flex">
-          <div className='ibm-plex-sans-thai-medium'>
-            <div class="p-10 bg-white border border-lime-200 rounded-lg shadow dark:bg-lime-600 dark:border-lime-500 overflow-hidden">
-              <div class="grid gap-6 md:grid-cols-1 place-items-center">
-                <FaCircleCheck class="mt-1 w-10 h-10 text-white text-lg transition duration-75" aria-hidden="true" />
+    <div className="p-8">
+      <div className="max-w-screen-lg mx-auto md:max-w-3xl place-items-center">
+        <div className="p-10 bg-white border border-lime-200 rounded-lg shadow dark:bg-lime-600 dark:border-lime-500 overflow-hidden">
+          <div className="grid gap-6 md:grid-cols-1 place-items-center">
+            <FaCircleCheck className="mt-1 w-10 h-10 text-white" aria-hidden="true" />
+            <p className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+              คุณลงทะเบียนชมรมผู้สูงอายุสำเร็จเรียบร้อยแล้ว
+            </p>
+            <p className="mb-2 font-normal text-white">
+              ผลการลงทะเบียนชมรมผู้สูงอายุของคุณ ทางชมรมจะแจ้งไปยังอีเมลที่คุณได้กรอกลงไป
+            </p>
+          </div>
 
-                <p class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">คุณลงทะเบียนชมรมผู้สูงอายุสำเร็จเรียบร้อยแล้ว</p>
-
-                <p class="mb-2 font-normal text-white">ผลการลงทะเบียนชมรมผู้สูงอายุของคุณ ทางชมรมจะแจ้งไปยังอีเมลที่คุณได้กรอกลงไปในฟอร์ม</p>
-
-              </div>
-
-              <div class="grid gap-6 md:grid-cols-1 place-items-center">
-
-                <button type="button" class="text-gray-900 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 me-2 mb-2 mt-5">
-                  <Link to='/login'>กลับไปยังหน้าเข้าสู่ระบบ</Link>
-
-                </button>
-              </div>
-            </div>
+          <div className="grid gap-6 md:grid-cols-1 place-items-center">
+            <button
+              type="button"
+              className="text-gray-900 bg-gray-100 hover:bg-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center me-2 mb-2 mt-5"
+            >
+              <Link to="/login">กลับไปยังหน้าเข้าสู่ระบบ</Link>
+            </button>
           </div>
         </div>
       </div>
     </div>
-
-  )
+  );
 }
 
+// =============== MAIN REGISTER COMPONENT ===============
 function Register() {
-
   const [step, setStep] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
-  const handleSubmit = async() =>{
-    try{
-      const formDataToSubmit = new FormData();
 
-      Object.keys(formData).forEach(key => {
-        formDataToSubmit.append(key, formData[key]);
-      });
-      const response = await createCandidate(formDataToSubmit);
+  // ---- Final Submit ----
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Build candidateData & heirData from the formData
+      const candidateData = {
+        title: formData.candidate_title,
+        first_name: formData.candidate_first_name,
+        last_name: formData.candidate_last_name,
+        national_id: formData.candidate_national_id,
+        dob: formData.candidate_dob,
+        phone: formData.candidate_phone,
+        gender: formData.candidate_gender,
+        occupation: formData.candidate_occupation,
+        address: {
+          house_number: formData.candidate_house_number,
+          moo: formData.candidate_moo,
+          soi: formData.candidate_soi,
+          street: formData.candidate_street,
+          subdistrict: formData.candidate_subdistrict,
+          district: formData.candidate_district,
+          province: formData.candidate_province,
+          postal_code: formData.candidate_postal_code,
+        },
+        document: {
+          house_registration: formData.candidate_house_registration,
+          id_card: formData.candidate_id_card,
+          rename_doc: formData.candidate_rename_doc,
+          med_certification: formData.candidate_med_certification,
+        },
+        account: {
+          email: formData.candidate_email,
+          password: formData.candidate_password,
+        },
+      };
 
-      if (response.success) {
-        alert('ได้ละจ้า')
-      }else {
-        alert('ไม่ได้อีกละสัส')
-      }
-    }catch(error){
-      console.error('Fail:', error)
-      alert('error ตอนอัป')
-  }
-}
+      const heirData = {
+        title: formData.heir_title,
+        first_name: formData.heir_first_name,
+        last_name: formData.heir_last_name,
+        national_id: formData.heir_national_id,
+        dob: formData.heir_dob,
+        phone: formData.heir_phone,
+        gender: formData.heir_gender,
+        occupation: formData.heir_occupation,
+        relationship: formData.heir_relationship,
+        address: {
+          house_number: formData.heir_house_number,
+          moo: formData.heir_moo,
+          soi: formData.heir_soi,
+          street: formData.heir_street,
+          subdistrict: formData.heir_subdistrict,
+          district: formData.heir_district,
+          province: formData.heir_province,
+          postal_code: formData.heir_postal_code,
+        },
+        document: {
+          house_registration: formData.heir_house_registration,
+          id_card: formData.heir_id_card,
+          rename_doc: formData.heir_rename_doc,
+        },
+        account: {
+          email: formData.heir_email,
+          password: "1235"
+        }
+      };
+    
 
+      const response = await createCandidate(candidateData, heirData);
+      console.log("User Created:", response);
+    } catch (error) {
+      console.error("Fail:", error);
+      alert("Error while registering");
+    }
+  };
 
-  const handleNext = () => {
+  // Steps
+  const handleNext = () => setStep((prevStep) => prevStep + 1);
+  const handleBack = () => setStep((prevStep) => (prevStep > 1 ? prevStep - 1 : 1));
+
+  // Modal toggles
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+
+  // When user clicks "Confirm" in the Modal
+  const ConfirmModal = async () => {
+    // 1) Submit data
+    await handleSubmit();
+    // 2) Move step forward to show Confirm page
     setStep((prevStep) => prevStep + 1);
-
+    // 3) Close modal
+    setIsModalOpen(false);
   };
-
-  const handleBack = () => {
-    setStep((prevStep) => (prevStep > 1 ? prevStep - 1 : 1));
-  };
-
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
-  const ConfirmModal = () => {
-    setStep((prevStep) => prevStep + 1);
-    setIsModalOpen(!isModalOpen);
-  }
-
 
   return (
     <div>
-      <nav class="bg-white">
-        <div class="max-w-screen-3xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <img src="logo.png" class="h-16" alt="Logo" />
+      <nav className="bg-white">
+        <div className="max-w-screen-3xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <img src="logo.png" className="h-16" alt="Logo" />
         </div>
       </nav>
 
       {step !== 3 ? (
-        <form class='p-8'>
-          <div class="max-w-screen-lg mx-auto overflow-hidden md:max-w-3xl place-items-center">
-            <div class="2xl:flex">
-              <div className='ibm-plex-sans-thai-medium'>
-                <div class="text-center text-3xl text-black mb-8 font-bold">ลงทะเบียนชมรมผู้สูงอายุ</div>
+        <form className="p-8" onSubmit={handleSubmit}>
+          <div className="max-w-screen-lg mx-auto md:max-w-3xl place-items-center">
+            <div className="2xl:flex">
+              <div className="ibm-plex-sans-thai-medium">
+                <div className="text-center text-3xl text-black mb-8 font-bold">
+                  ลงทะเบียนชมรมผู้สูงอายุ
+                </div>
 
-                {step === 1 && <RegisterPage1 formData={formData} setFormData={setFormData}/>}
-                {step === 2 && <RegisterPage2 formData={formData} setFormData={setFormData}/>}
+                {step === 1 && (
+                  <RegisterPage1 formData={formData} setFormData={setFormData} />
+                )}
+                {step === 2 && (
+                  <RegisterPage2 formData={formData} setFormData={setFormData} />
+                )}
 
-                {/* back กับ next */}
                 <div className="mt-14">
                   <div className="w-full max-w-md mx-auto bg-gray-100 border-2 border-gray-200 rounded-md">
                     <div className="flex items-center justify-between gap-3 p-3 bg-white rounded">
-                      {/* ซ่อนปุ่ม Back ถ้าเป็นหน้าแรก */}
+                      {/* Back button (hide if step 1) */}
                       {step !== 1 ? (
-                        <button type="button"
+                        <button
+                          type="button"
                           onClick={handleBack}
-                          className="flex items-center gap-1.5 border-none text-base font-medium py-2.5 text-gray-700 transition-all duration-300 hover:text-gray-600"
+                          className="flex items-center gap-1.5 text-base font-medium py-2.5 text-gray-700 hover:text-gray-600"
                         >
                           <svg
                             className="rotate-180"
@@ -1038,34 +1032,60 @@ function Register() {
                           ย้อนกลับ
                         </button>
                       ) : (
-                        <div class="w-[95px]"></div>
+                        <div style={{ width: "95px" }}></div>
                       )}
+
+                      {/* Step indicators */}
                       <ul className="flex gap-1 items-center">
-                        <li className={`w-2 h-2 rounded-full ${step === 1 ? "bg-gray-600" : "bg-gray-300"}`}></li>
-                        <li className={`w-2 h-2 rounded-full ${step === 2 ? "bg-gray-600" : "bg-gray-300"}`}></li>
+                        <li
+                          className={`w-2 h-2 rounded-full ${step === 1 ? "bg-gray-600" : "bg-gray-300"
+                            }`}
+                        ></li>
+                        <li
+                          className={`w-2 h-2 rounded-full ${step === 2 ? "bg-gray-600" : "bg-gray-300"
+                            }`}
+                        ></li>
                       </ul>
 
-                      {step !== 2 ? (
-                        <div>
-                          <button onClick={handleNext} type="button" class="flex items-center gap-1.5 border-none text-base font-medium py-2.5 text-gray-700 transition-all duration-300 hover:text-gray-600">
-                            หน้าถัดไป
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="23" viewBox="0 0 22 23" fill="none">
-                              <path
-                                d="M8.25324 6.37646L13.7535 11.8767L8.25 17.3802"
-                                stroke="currentColor"
-                                strokeWidth="1.6"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-
+                      {/* Next or Finish button */}
+                      {step < 2 ? (
+                        <button
+                          onClick={handleNext}
+                          type="button"
+                          className="flex items-center gap-1.5 text-base font-medium py-2.5 text-gray-700 hover:text-gray-600"
+                        >
+                          หน้าถัดไป
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="22"
+                            height="23"
+                            viewBox="0 0 22 23"
+                            fill="none"
+                          >
+                            <path
+                              d="M8.25324 6.37646L13.7535 11.8767L8.25 17.3802"
+                              stroke="currentColor"
+                              strokeWidth="1.6"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
                       ) : (
                         <div>
-                          <button onClick={toggleModal} type="button" class="flex items-center gap-1.5 border-none text-base font-medium py-2.5 text-gray-700 transition-all duration-300 hover:text-gray-600">
+                          <button
+                            onClick={toggleModal}
+                            type="button"
+                            className="flex items-center gap-1.5 text-base font-medium py-2.5 text-gray-700 hover:text-gray-600"
+                          >
                             เสร็จสิ้น
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="23" viewBox="0 0 22 23" fill="none">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="22"
+                              height="23"
+                              viewBox="0 0 22 23"
+                              fill="none"
+                            >
                               <path
                                 d="M8.25324 6.37646L13.7535 11.8767L8.25 17.3802"
                                 stroke="currentColor"
@@ -1076,39 +1096,67 @@ function Register() {
                             </svg>
                           </button>
 
+                          {/* Modal */}
                           {isModalOpen && (
                             <div
                               id="popup-modal"
-                              className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full bg-black bg-opacity-50"
+                              className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50"
                             >
                               <div className="relative p-4 w-full max-w-md max-h-full">
                                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-100">
                                   <button
                                     type="button"
                                     onClick={toggleModal}
-                                    className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                    className="absolute top-3 end-2.5 text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8"
                                   >
-                                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                    <svg
+                                      className="w-3 h-3"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 14 14"
+                                    >
+                                      <path
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                      />
                                     </svg>
                                     <span className="sr-only">Close modal</span>
                                   </button>
                                   <div className="p-4 md:p-5 text-center">
-                                    <svg className="mx-auto mb-4 text-gray-800 w-12 h-12 dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    <svg
+                                      className="mx-auto mb-4 text-gray-800 w-12 h-12"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                      />
                                     </svg>
-                                    <p className="mb-1 text-lg font-bold text-gray-800 dark:text-gray-800">ยืนยันการลงทะเบียน</p>
-                                    <p className="mb-5 text-base font-normal text-gray-800 dark:text-gray-800">โปรดตรวจสอบข้อมูลให้ถูกต้องก่อนกดยืนยัน</p>
+                                    <p className="mb-1 text-lg font-bold text-gray-800">
+                                      ยืนยันการลงทะเบียน
+                                    </p>
+                                    <p className="mb-5 text-base font-normal text-gray-800">
+                                      โปรดตรวจสอบข้อมูลให้ถูกต้องก่อนกดยืนยัน
+                                    </p>
                                     <button
-                                      onClick={ConfirmModal}
-                                      onSubmit={handleSubmit}
-                                      className="text-white text-gray-900 focus:outline-none bg-white rounded-lg border border-lime-200 hover:bg-lime-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-lime-100 dark:focus:ring-lime-600 dark:bg-lime-700 dark:text-lime-400 dark:border-lime-500 dark:hover:text-white dark:hover:bg-lime-600 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                                      type="submit"
+                                      // onClick={ConfirmModal}
+                                      className="text-gray-900 bg-white border border-lime-200 hover:bg-lime-100 font-medium rounded-lg text-sm px-5 py-2.5"
                                     >
                                       ยืนยัน
                                     </button>
                                     <button
+                                    type="button"
                                       onClick={toggleModal}
-                                      className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-red-200 hover:bg-red-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-700 dark:bg-red-800 dark:text-red-400 dark:border-red-600 dark:hover:text-white dark:hover:bg-red-700"
+                                      className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white border border-red-200 hover:bg-red-100 rounded-lg"
                                     >
                                       ยกเลิก
                                     </button>
@@ -1126,14 +1174,11 @@ function Register() {
             </div>
           </div>
         </form>
-
       ) : (
         <Confirm />
       )}
-
     </div>
-  )
+  );
 }
 
-
-export default Register();
+export default Register;

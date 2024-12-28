@@ -5,10 +5,10 @@ export const createDocument = async (documentData) => {
     const { doc_path, doc_type, entity_type, entity_id } = documentData;
     const { rows } = await query(
         `INSERT INTO documents (doc_path, doc_type, entity_type, entity_id) 
-         VALUES ($1, $2, $3, $4) RETURNING *`,
+         VALUES ($1, $2, $3, $4) RETURNING doc_id`,
         [doc_path, doc_type, entity_type, entity_id]
     );
-    return rows[0];
+    return rows[0].doc_id;
 };
 
 // Get a document by ID

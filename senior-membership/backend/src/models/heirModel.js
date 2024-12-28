@@ -5,10 +5,10 @@ export const createHeir = async (heirData) => {
     const { title, first_name, last_name, national_id, dob, email, phone, gender, occupation, relationship, address_id, document_id, account_id } = heirData;
     const { rows } = await query(
         `INSERT INTO heirs (title, first_name, last_name, national_id, dob, email, phone, gender, occupation, relationship, address_id, document_id, account_id)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`,
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING heir_id`,
         [title, first_name, last_name, national_id, dob, email, phone, gender, occupation, relationship, address_id, document_id, account_id]
     );
-    return rows[0];
+    return rows[0].heir_id;
 };
 
 // Get heir by national ID

@@ -4,10 +4,10 @@ export const createAddress = async(addressData) => {
     const { house_num, moo, soi, street, province, district, subdistrict, postal_code} = addressData;
     const { rows } = await query (
         `INSERT INTO address (house_number, moo, soi, street, province, district, subdistrict, postal_code) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING address_id`,
          [ house_num, moo, soi, street, province, district, subdistrict, postal_code]
     );
-    return rows[0];
+    return rows[0].address_id;
 }
 
 export const getAddressById = async (id) => {
