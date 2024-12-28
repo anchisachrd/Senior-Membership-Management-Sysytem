@@ -2,7 +2,7 @@ import React from 'react'
 
 function CadidateWaitingList() {
   return (
-    <div>CadidateWaitingList</div>
+    <div class="p-4 sm:ml-64">CadidateWaitingList</div>
   )
 }
 

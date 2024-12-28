@@ -2,7 +2,7 @@ import React from 'react'
 
 function CommitteCandidateProfile() {
   return (
-    <div>CommitteCandidateProfile</div>
+    <div class="p-4 sm:ml-64" >CommitteCandidateProfile</div>
   )
 }
 

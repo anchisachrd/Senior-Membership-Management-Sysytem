@@ -2,7 +2,7 @@ import React from 'react'
 
 function CommitteCandidateList() {
   return (
-    <div>CommitteCandidateList</div>
+    <div class="p-4 sm:ml-64" >CommitteCandidateList</div>
   )
 }
 

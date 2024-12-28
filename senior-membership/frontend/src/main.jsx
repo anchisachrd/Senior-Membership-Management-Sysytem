@@ -27,16 +27,16 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       </Route>
 
       <Route  element={ <SidebarStaff />}>
-        <Route path='/committee/condidateList' element={ <CommitteCandidateList />} />
-        <Route path='/committe/candidateProfile' element={ <CommitteCandidateProfile />} />
-        <Route path='/staff/candidateList' element={ < StaffCandidateList/>} />
-        <Route path='/staff/cadidateWaitingList' element={ < CadidateWaitingList />} />
-        <Route path='/staff/candidateProfile' element={ < StaffCandidateProfile/>} />
+        <Route path='/committee_condidateList' element={ <CommitteCandidateList />} />
+        <Route path='/committe_candidateProfile' element={ <CommitteCandidateProfile />} />
+        <Route path='/staff_candidateList' element={ < StaffCandidateList/>} />
+        <Route path='/staff_cadidateWaitingList' element={ < CadidateWaitingList />} />
+        <Route path='/staff_candidateProfile' element={ < StaffCandidateProfile/>} />
       </Route>
       
       {/* หน้าที่ไม่ต้องมี side bar */}
       <Route path='/login' element={ <Login />} />
-      <Route path='/staff/login' element={ <LoginStaff />} />
+      <Route path='/staff_login' element={ <LoginStaff />} />
       <Route path='/register' element={ <Register />} />
     </Routes>
   </BrowserRouter>,
