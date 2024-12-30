@@ -96,6 +96,7 @@ export const createCandidate = async (candidateData, heirData) => {
     // 3) Same Address 
     //--------------------------------------------
     formData.append("sameAddress", heirData.sameAddress ? "true" : "false");
+    
 
     //--------------------------------------------
     // 4) Send to Backend
@@ -105,6 +106,9 @@ export const createCandidate = async (candidateData, heirData) => {
         "Content-Type": "multipart/form-data",
       },
     });
+
+   
+
 
     return response.data; // The backend returns { success, data, message }
   } catch (error) {

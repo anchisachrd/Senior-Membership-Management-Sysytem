@@ -210,11 +210,12 @@ function RegisterPage1({ formData, setFormData }) {
                 type="password"
                 name="candidate_confirm_password"
                 id="candidate_confirm_password"
-                
+
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
                 placeholder="กรอกรหัสผ่านให้ตรงกัน"
                 required
               />
+              
             </div>
           </div>
 
@@ -326,7 +327,7 @@ function RegisterPage1({ formData, setFormData }) {
                 <option value="กรุงเทพฯ">กรุงเทพมหานคร</option>
                 <option value="เชียงใหม่">เชียงใหม่</option>
                 <option value="ภูเก็ต">ภูเก็ต</option>
-                
+
               </select>
             </div>
           </div>
@@ -449,6 +450,14 @@ function RegisterPage2({ formData, setFormData }) {
         setFormData((prev) => ({
           ...prev,
           sameAddress: false,
+          heir_house_number: "",
+          heir_moo: "",
+          heir_soi: "",
+          heir_street: "",
+          heir_subdistrict: "",
+          heir_district: "",
+          heir_province: "",
+          heir_postal_code: "",
         }));
       }
     } else {
@@ -768,7 +777,7 @@ function RegisterPage2({ formData, setFormData }) {
                 <option value="">เลือกจังหวัด</option>
                 <option value="กรุงเทพฯ">กรุงเทพมหานคร</option>
                 <option value="เชียงใหม่">เชียงใหม่</option>
-         
+
               </select>
             </div>
           </div>
@@ -886,81 +895,96 @@ function Register() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({});
 
-  // ---- Final Submit ----
+
+ 
+
+  const submitData = async () => {
+    const candidateData = {
+      title: formData.candidate_title,
+      first_name: formData.candidate_first_name,
+      last_name: formData.candidate_last_name,
+      national_id: formData.candidate_national_id,
+      dob: formData.candidate_dob,
+      phone: formData.candidate_phone,
+      gender: formData.candidate_gender,
+      occupation: formData.candidate_occupation,
+      address: {
+        house_number: formData.candidate_house_number,
+        moo: formData.candidate_moo,
+        soi: formData.candidate_soi,
+        street: formData.candidate_street,
+        subdistrict: formData.candidate_subdistrict,
+        district: formData.candidate_district,
+        province: formData.candidate_province,
+        postal_code: formData.candidate_postal_code,
+      },
+      document: {
+        house_registration: formData.candidate_house_registration,
+        id_card: formData.candidate_id_card,
+        rename_doc: formData.candidate_rename_doc,
+        med_certification: formData.candidate_med_certification,
+      },
+      account: {
+        email: formData.candidate_email,
+        password: formData.candidate_password,
+      },
+    };
+
+    const heirData = {
+      title: formData.heir_title,
+      first_name: formData.heir_first_name,
+      last_name: formData.heir_last_name,
+      national_id: formData.heir_national_id,
+      dob: formData.heir_dob,
+      phone: formData.heir_phone,
+      gender: formData.heir_gender,
+      occupation: formData.heir_occupation,
+      relationship: formData.heir_relationship,
+      address: {
+        house_number: formData.heir_house_number,
+        moo: formData.heir_moo,
+        soi: formData.heir_soi,
+        street: formData.heir_street,
+        subdistrict: formData.heir_subdistrict,
+        district: formData.heir_district,
+        province: formData.heir_province,
+        postal_code: formData.heir_postal_code,
+      },
+      document: {
+        house_registration: formData.heir_house_registration,
+        id_card: formData.heir_id_card,
+        rename_doc: formData.heir_rename_doc,
+      },
+      account: {
+        email: formData.heir_email,
+        password: "1235"
+      },
+      sameAddress: formData.sameAddress
+    };
+  
+    await createCandidate(candidateData, heirData);
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Build candidateData & heirData from the formData
-      const candidateData = {
-        title: formData.candidate_title,
-        first_name: formData.candidate_first_name,
-        last_name: formData.candidate_last_name,
-        national_id: formData.candidate_national_id,
-        dob: formData.candidate_dob,
-        phone: formData.candidate_phone,
-        gender: formData.candidate_gender,
-        occupation: formData.candidate_occupation,
-        address: {
-          house_number: formData.candidate_house_number,
-          moo: formData.candidate_moo,
-          soi: formData.candidate_soi,
-          street: formData.candidate_street,
-          subdistrict: formData.candidate_subdistrict,
-          district: formData.candidate_district,
-          province: formData.candidate_province,
-          postal_code: formData.candidate_postal_code,
-        },
-        document: {
-          house_registration: formData.candidate_house_registration,
-          id_card: formData.candidate_id_card,
-          rename_doc: formData.candidate_rename_doc,
-          med_certification: formData.candidate_med_certification,
-        },
-        account: {
-          email: formData.candidate_email,
-          password: formData.candidate_password,
-        },
-      };
-
-      const heirData = {
-        title: formData.heir_title,
-        first_name: formData.heir_first_name,
-        last_name: formData.heir_last_name,
-        national_id: formData.heir_national_id,
-        dob: formData.heir_dob,
-        phone: formData.heir_phone,
-        gender: formData.heir_gender,
-        occupation: formData.heir_occupation,
-        relationship: formData.heir_relationship,
-        address: {
-          house_number: formData.heir_house_number,
-          moo: formData.heir_moo,
-          soi: formData.heir_soi,
-          street: formData.heir_street,
-          subdistrict: formData.heir_subdistrict,
-          district: formData.heir_district,
-          province: formData.heir_province,
-          postal_code: formData.heir_postal_code,
-        },
-        document: {
-          house_registration: formData.heir_house_registration,
-          id_card: formData.heir_id_card,
-          rename_doc: formData.heir_rename_doc,
-        },
-        account: {
-          email: formData.heir_email,
-          password: "1235"
-        }
-      };
-    
-
-      const response = await createCandidate(candidateData, heirData);
-      console.log("User Created:", response);
+      await submitData();
+      setStep(3);
     } catch (error) {
-      console.error("Fail:", error);
-      alert("Error while registering");
+      console.error("Error during registration:", error);
     }
   };
+  
+  const ConfirmModal = async () => {
+    try {
+      await submitData();
+      setStep(3);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error confirming registration:", error);
+    }
+  };
+  
 
   // Steps
   const handleNext = () => setStep((prevStep) => prevStep + 1);
@@ -970,14 +994,7 @@ function Register() {
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   // When user clicks "Confirm" in the Modal
-  const ConfirmModal = async () => {
-    // 1) Submit data
-    await handleSubmit();
-    // 2) Move step forward to show Confirm page
-    setStep((prevStep) => prevStep + 1);
-    // 3) Close modal
-    setIsModalOpen(false);
-  };
+
 
   return (
     <div>
@@ -1106,7 +1123,6 @@ function Register() {
                                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-100">
                                   <button
                                     type="button"
-                                    onClick={toggleModal}
                                     className="absolute top-3 end-2.5 text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8"
                                   >
                                     <svg
@@ -1148,14 +1164,14 @@ function Register() {
                                     </p>
                                     <button
                                       type="submit"
-                                      // onClick={ConfirmModal}
+                                      onClick={ConfirmModal}
                                       className="text-gray-900 bg-white border border-lime-200 hover:bg-lime-100 font-medium rounded-lg text-sm px-5 py-2.5"
                                     >
                                       ยืนยัน
                                     </button>
                                     <button
-                                    type="button"
-                                      onClick={toggleModal}
+                                      type="button"
+                                      onClick={() => setIsModalOpen(false)}
                                       className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white border border-red-200 hover:bg-red-100 rounded-lg"
                                     >
                                       ยกเลิก
