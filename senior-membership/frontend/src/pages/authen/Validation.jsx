@@ -59,7 +59,7 @@ export const validationSchemaStep2 = Yup.object({
   heir_province: Yup.string().required('กรุณาเลือกจังหวัด'),
   heir_postal_code: Yup.string().required('กรุณากรอกรหัสไปรษณีย์'),
   // Document Uploads
-  heir_house_registration: Yup.mixed().required('กรุณาอัพโหลดสำเนาทะเบียนบ้านของทายาท'),
-  heir_id_card: Yup.mixed().required('กรุณาอัพโหลดสำเนาบัตรประชาชนของทายาท'),
+  // heir_house_registration: Yup.mixed().required('กรุณาอัพโหลดสำเนาทะเบียนบ้านของทายาท'),
+  // heir_id_card: Yup.mixed().required('กรุณาอัพโหลดสำเนาบัตรประชาชนของทายาท'),
   // 'heir_rename_doc' is optional
 });

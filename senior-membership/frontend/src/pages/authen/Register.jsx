@@ -1122,7 +1122,7 @@ function Register() {
         },
         account: {
           email: values.heir_email,
-          password: "1235", // Placeholder, should be handled securely
+          // password: "1235",
         },
         sameAddress: values.sameAddress,
       };
@@ -1131,9 +1131,9 @@ function Register() {
       setStep(3); // Move to confirmation step
     } catch (error) {
       console.error("Error during registration:", error);
-      // Optionally, set a global error state to display to the user
+      
       actions.setSubmitting(false);
-      // You can also display an error message to the user here
+    
     }
   };
 

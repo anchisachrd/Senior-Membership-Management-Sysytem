@@ -1,4 +1,4 @@
-const { register } = require('../backend/src/services/registerService');
+
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

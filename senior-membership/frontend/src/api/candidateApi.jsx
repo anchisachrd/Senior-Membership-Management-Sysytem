@@ -79,7 +79,7 @@ export const createCandidate = async (candidateData, heirData) => {
 
     // Heir account 
     formData.append("heir_email", heirData.account.email || "");
-    formData.append("heir_password", heirData.account.password || "");
+    // formData.append("heir_password", heirData.account.password || "");
 
     // Heir documents
     if (heirData.document?.house_registration) {

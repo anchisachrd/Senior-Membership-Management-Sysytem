@@ -53,7 +53,7 @@ export const createCandidateData = async (req, res) => {
       sameAddress,
       account: {
         email: req.body.heir_email,
-        password: req.body.heir_password || "AUTO_GENERATED_PASSWORD",
+        // password: req.body.heir_password || "AUTO_GENERATED_PASSWORD",
       },
       document: {
 
