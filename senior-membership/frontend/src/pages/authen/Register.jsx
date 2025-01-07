@@ -8,6 +8,27 @@ import { validationSchemaStep1, validationSchemaStep2 } from "./Validation"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+// Define the provinces as a reusable array
+const provinces = [
+  "กระบี่", "กรุงเทพมหานคร", "กาญจนบุรี", "กาฬสินธุ์", "กำแพงเพชร",
+  "ขอนแก่น", "จันทบุรี", "ฉะเชิงเทรา", "ชลบุรี", "ชัยนาท",
+  "ชัยภูมิ", "ชุมพร", "เชียงราย", "เชียงใหม่", "ตรัง",
+  "ตราด", "ตาก", "นครนายก", "นครปฐม", "นครพนม",
+  "นครราชสีมา", "นครศรีธรรมราช", "นครสวรรค์", "นนทบุรี", "นราธิวาส",
+  "น่าน", "บึงกาฬ", "บุรีรัมย์", "ปทุมธานี", "ประจวบคีรีขันธ์",
+  "ปราจีนบุรี", "ปัตตานี", "พระนครศรีอยุธยา", "พะเยา", "พังงา",
+  "พัทลุง", "พิจิตร", "พิษณุโลก", "เพชรบุรี", "เพชรบูรณ์",
+  "แพร่", "ภูเก็ต", "มหาสารคาม", "มุกดาหาร", "แม่ฮ่องสอน",
+  "ยโสธร", "ยะลา", "ร้อยเอ็ด", "ระนอง", "ระยอง",
+  "ราชบุรี", "ลพบุรี", "ลำปาง", "ลำพูน", "เลย",
+  "ศรีสะเกษ", "สกลนคร", "สงขลา", "สตูล", "สมุทรปราการ",
+  "สมุทรสงคราม", "สมุทรสาคร", "สระแก้ว", "สระบุรี", "สิงห์บุรี",
+  "สุโขทัย", "สุพรรณบุรี", "สุราษฎร์ธานี", "สุรินทร์", "หนองคาย",
+  "หนองบัวลำภู", "อ่างทอง", "อำนาจเจริญ", "อุดรธานี", "อุตรดิตถ์",
+  "อุทัยธานี", "อุบลราชธานี"
+];
+
+
 // =============== STEP 1: Candidate Page ===============
 function RegisterPage1({ values, errors, touched, setFieldValue }) {
   // Handle file input changes
@@ -383,9 +404,11 @@ function RegisterPage1({ values, errors, touched, setFieldValue }) {
                   }`}
               >
                 <option value="">เลือกจังหวัด</option>
-                <option value="กรุงเทพฯ">กรุงเทพมหานคร</option>
-                <option value="เชียงใหม่">เชียงใหม่</option>
-                <option value="ภูเก็ต">ภูเก็ต</option>
+                {provinces.map((province) => (
+                  <option key={province} value={province}>
+                    {province}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage name="candidate_province" component="div" className="text-red-600 text-sm mt-1" />
             </div>
@@ -411,7 +434,7 @@ function RegisterPage1({ values, errors, touched, setFieldValue }) {
           </div>
 
           {/* File Uploads */}
-          <div>
+          <div className="mt-5">
             <label htmlFor="candidate_house_registration" className="block mb-2 text-sm font-medium text-gray-900">
               สำเนาทะเบียนบ้าน
             </label>
@@ -425,9 +448,12 @@ function RegisterPage1({ values, errors, touched, setFieldValue }) {
                 : "border border-gray-400"
                 } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
             />
-            {errors.candidate_house_registration && touched.candidate_house_registration && (
-              <div className="text-red-600 text-sm mt-1">{errors.candidate_house_registration}</div>
+            {values.candidate_house_registration && (
+              <p className="mt-2 text-sm text-blue-500">
+                ไฟล์ปัจจุบัน: {values.candidate_house_registration.name}
+              </p>
             )}
+            <ErrorMessage name="candidate_house_registration" component="div" className="text-red-600 text-sm mt-1" />
           </div>
 
           <div className="mt-5">
@@ -438,34 +464,40 @@ function RegisterPage1({ values, errors, touched, setFieldValue }) {
               type="file"
               name="candidate_id_card"
               id="candidate_id_card"
-              onChange={handleFileChange}
+              onChange={handleFileChange} // Call the function when a file is selected
               className={`bg-light ${errors.candidate_id_card && touched.candidate_id_card
                 ? "bg-red-100"
                 : "border border-gray-400"
                 } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
             />
-            {errors.candidate_id_card && touched.candidate_id_card && (
-              <div className="text-red-600 text-sm mt-1">{errors.candidate_id_card}</div>
+            {values.candidate_id_card && (
+              <p className="mt-2 text-sm text-blue-500">
+                ไฟล์ปัจจุบัน: {values.candidate_id_card.name}
+              </p>
             )}
+            <ErrorMessage name="candidate_id_card" component="div" className="text-red-600 text-sm mt-1" />
           </div>
 
           <div className="mt-5">
             <label htmlFor="candidate_rename_doc" className="block mb-2 text-sm font-medium text-gray-900">
-              ใบเปลี่ยนชื่อ
+              ใบเปลี่ยนชื่อ (ถ้ามี)
             </label>
             <input
               type="file"
               name="candidate_rename_doc"
               id="candidate_rename_doc"
-              onChange={handleFileChange}
+              onChange={handleFileChange} // Call the function when a file is selected
               className={`bg-light ${errors.candidate_rename_doc && touched.candidate_rename_doc
                 ? "bg-red-100"
                 : "border border-gray-400"
                 } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
             />
-            {errors.candidate_rename_doc && touched.candidate_rename_doc && (
-              <div className="text-red-600 text-sm mt-1">{errors.candidate_rename_doc}</div>
+            {values.candidate_rename_doc && (
+              <p className="mt-2 text-sm text-blue-500">
+                ไฟล์ปัจจุบัน: {values.candidate_rename_doc.name}
+              </p>
             )}
+            <ErrorMessage name="candidate_rename_doc" component="div" className="text-red-600 text-sm mt-1" />
           </div>
 
           <div className="mt-5">
@@ -476,16 +508,20 @@ function RegisterPage1({ values, errors, touched, setFieldValue }) {
               type="file"
               name="candidate_med_certification"
               id="candidate_med_certification"
-              onChange={handleFileChange}
+              onChange={handleFileChange} // Call the function when a file is selected
               className={`bg-light ${errors.candidate_med_certification && touched.candidate_med_certification
                 ? "bg-red-100"
                 : "border border-gray-400"
                 } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
             />
-            {errors.candidate_med_certification && touched.candidate_med_certification && (
-              <div className="text-red-600 text-sm mt-1">{errors.candidate_med_certification}</div>
+            {values.candidate_med_certification && (
+              <p className="mt-2 text-sm text-blue-500">
+                ไฟล์ปัจจุบัน: {values.candidate_med_certification.name}
+              </p>
             )}
+            <ErrorMessage name="candidate_med_certification" component="div" className="text-red-600 text-sm mt-1" />
           </div>
+
         </div>
       </div>
     </div>
@@ -606,7 +642,7 @@ function RegisterPage2({ values, setFieldValue, errors, touched }) {
                 id="heir_national_id"
                 className={`bg-light ${errors.heir_national_id && touched.heir_national_id ? " bg-red-100" : "border border-gray-400"
                   } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
-              placeholder="กรอกเลขบัตรประชาชน"
+                placeholder="กรอกเลขบัตรประชาชน"
               />
               <ErrorMessage name="heir_national_id" component="div" className="text-red-600 text-sm mt-1" />
             </div>
@@ -877,8 +913,11 @@ function RegisterPage2({ values, setFieldValue, errors, touched }) {
                 disabled={values.sameAddress}
               >
                 <option value="">เลือกจังหวัด</option>
-                <option value="กรุงเทพฯ">กรุงเทพมหานคร</option>
-                <option value="เชียงใหม่">เชียงใหม่</option>
+                {provinces.map((province) => (
+                  <option key={province} value={province}>
+                    {province}
+                  </option>
+                ))}
               </Field>
               <ErrorMessage name="heir_province" component="div" className="text-red-600 text-sm mt-1" />
             </div>
@@ -917,9 +956,12 @@ function RegisterPage2({ values, setFieldValue, errors, touched }) {
                 : "border border-gray-400"
                 } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
             />
-            {errors.heir_house_registration && touched.heir_house_registration && (
-              <div className="text-red-600 text-sm mt-1">{errors.heir_house_registration}</div>
+            {values.heir_house_registration && (
+              <p className="mt-2 text-sm text-blue-500">
+                ไฟล์ปัจจุบัน: {values.heir_house_registration.name}
+              </p>
             )}
+            <ErrorMessage name="heir_house_registration" component="div" className="text-red-600 text-sm mt-1" />
           </div>
 
           <div className="mt-5">
@@ -931,30 +973,41 @@ function RegisterPage2({ values, setFieldValue, errors, touched }) {
               name="heir_id_card"
               id="heir_id_card"
               onChange={handleFileChange}
-              className={`bg-light ${errors.heir_id_card && touched.heir_id_card ? "bg-red-100" : "border border-gray-400"
+              className={`bg-light ${errors.heir_id_card && touched.heir_id_card
+                ? "bg-red-100"
+                : "border border-gray-400"
                 } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
             />
-            {errors.heir_id_card && touched.heir_id_card && (
-              <div className="text-red-600 text-sm mt-1">{errors.heir_id_card}</div>
+            {values.heir_id_card && (
+              <p className="mt-2 text-sm text-gray-600">
+                Selected file: {values.heir_id_card.name}
+              </p>
             )}
+            <ErrorMessage name="heir_id_card" component="div" className="text-red-600 text-sm mt-1" />
           </div>
 
           <div className="mt-5">
             <label htmlFor="heir_rename_doc" className="block mb-2 text-sm font-medium text-gray-900">
-              ใบเปลี่ยนชื่อ
+              ใบเปลี่ยนชื่อ (ถ้ามี)
             </label>
             <input
               type="file"
               name="heir_rename_doc"
               id="heir_rename_doc"
               onChange={handleFileChange}
-              className={`bg-light ${errors.heir_rename_doc && touched.heir_rename_doc ? "bg-red-100" : "border border-gray-400"
+              className={`bg-light ${errors.heir_rename_doc && touched.heir_rename_doc
+                ? "bg-red-100"
+                : "border border-gray-400"
                 } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
             />
-            {errors.heir_rename_doc && touched.heir_rename_doc && (
-              <div className="text-red-600 text-sm mt-1">{errors.heir_rename_doc}</div>
+            {values.heir_rename_doc && (
+              <p className="mt-2 text-sm text-blue-500">
+                ไฟล์ปัจจุบัน: {values.heir_rename_doc.name}
+              </p>
             )}
+            <ErrorMessage name="heir_rename_doc" component="div" className="text-red-600 text-sm mt-1" />
           </div>
+
         </div>
       </div>
     </div>
@@ -1131,9 +1184,9 @@ function Register() {
       setStep(3); // Move to confirmation step
     } catch (error) {
       console.error("Error during registration:", error);
-      
+
       actions.setSubmitting(false);
-    
+
     }
   };
 
