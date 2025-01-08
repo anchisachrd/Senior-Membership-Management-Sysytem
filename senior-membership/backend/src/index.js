@@ -15,7 +15,6 @@ app.use('/api/candidates', candidateRoutes);
 
 // Optional: Serve files from the upload folder (if you want direct access to them)
 import path from 'path';
-import fs from 'fs';
 app.use('/upload', express.static(path.join(process.cwd(), 'src', 'upload')));
 
 // Error-handling for Multer or custom errors (optional)

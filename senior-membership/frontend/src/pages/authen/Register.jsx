@@ -32,9 +32,28 @@ const provinces = [
 // =============== STEP 1: Candidate Page ===============
 function RegisterPage1({ values, errors, touched, setFieldValue }) {
   // Handle file input changes
+  const [previewUrls, setPreviewUrls] = useState({
+    candidate_house_registration: null,
+    candidate_id_card: null,
+    candidate_rename_doc: null,
+    candidate_med_certification: null,
+  });
+
+  // Enhanced file change handler
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFieldValue(name, files[0]);
+    const file = files && files[0];
+    if (!file) return;
+
+    // 1) Store the file object in Formik
+    setFieldValue(name, file);
+
+    // 2) Generate a preview URL
+    const previewUrl = URL.createObjectURL(file);
+
+    // 3) Store that previewUrl in Formik as well, e.g. add "_preview"
+    //    If name == "candidate_house_registration", then field for preview might be "candidate_house_registration_preview"
+    setFieldValue(`${name}_preview`, previewUrl);
   };
 
   return (
@@ -453,6 +472,17 @@ function RegisterPage1({ values, errors, touched, setFieldValue }) {
                 ไฟล์ปัจจุบัน: {values.candidate_house_registration.name}
               </p>
             )}
+            {/* Show preview (img or iframe) */}
+            {values.candidate_house_registration && (
+              <div className="mt-2">
+                <img
+                  src={values.candidate_house_registration_preview}
+                  alt="Preview"
+                  style={{ maxWidth: "200px", height: "auto" }}
+                />
+              </div>
+            )}
+
             <ErrorMessage name="candidate_house_registration" component="div" className="text-red-600 text-sm mt-1" />
           </div>
 
@@ -979,8 +1009,8 @@ function RegisterPage2({ values, setFieldValue, errors, touched }) {
                 } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
             />
             {values.heir_id_card && (
-              <p className="mt-2 text-sm text-gray-600">
-                Selected file: {values.heir_id_card.name}
+              <p className="mt-2 text-sm text-blue-500">
+                ไฟล์ปัจจุบัน: {values.heir_id_card.name}
               </p>
             )}
             <ErrorMessage name="heir_id_card" component="div" className="text-red-600 text-sm mt-1" />
@@ -1072,6 +1102,7 @@ function Register() {
     candidate_province: "",
     candidate_postal_code: "",
     candidate_house_registration: null,
+    candidate_house_registration_preview: null,
     candidate_id_card: null,
     candidate_rename_doc: null,
     candidate_med_certification: null,

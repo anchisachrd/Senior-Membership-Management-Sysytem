@@ -84,32 +84,32 @@ export const register = async (candidateData, heirData) => {
         await documentModel.createDocument({
           doc_path: candidateData.document.house_registration,
           doc_type: "house_registration",
-          entity_type: "candidate",
-          entity_id: candidateID,
+          candidate_id: candidateID, // Because it's for candidate
+  heir_id: null, 
         });
       }
       if (candidateData.document.id_card) {
         await documentModel.createDocument({
           doc_path: candidateData.document.id_card,
           doc_type: "id_card",
-          entity_type: "candidate",
-          entity_id: candidateID,
+          candidate_id: candidateID, // Because it's for candidate
+  heir_id: null, 
         });
       }
       if (candidateData.document.rename_doc) {
         await documentModel.createDocument({
           doc_path: candidateData.document.rename_doc,
           doc_type: "rename_doc",
-          entity_type: "candidate",
-          entityId: candidateID,
+          candidate_id: candidateID, // Because it's for candidate
+  heir_id: null, 
         });
       }
       if (candidateData.document.med_certification) {
         await documentModel.createDocument({
           doc_path: candidateData.document.med_certification,
           doc_type: "med_certification",
-          entity_type: "candidate",
-          entity_id: candidateID,
+          candidate_id: candidateID, // Because it's for candidate
+  heir_id: null, 
         });
       }
     }
@@ -173,7 +173,7 @@ export const register = async (candidateData, heirData) => {
       account_id: heirAccountID,
       // documentID: etc., or just let it be null for now
     });
-
+    console.log("New Heir ID =>", newHeirID);
     //-------------------------------------------
     // 8) HANDLE HEIR DOCUMENTS
     //-------------------------------------------
@@ -182,24 +182,24 @@ export const register = async (candidateData, heirData) => {
         await documentModel.createDocument({
           doc_path: heirData.document.house_registration,
           doc_type: "house_registration",
-          entity_type: "heir",
-          entity_id: newHeirID,
+          candidate_id: null,
+          heir_id: newHeirID,
         });
       }
       if (heirData.document.id_card) {
         await documentModel.createDocument({
           doc_path: heirData.document.id_card,
           doc_type: "id_card",
-          entity_type: "heir",
-          entity_id: newHeirID,
+          candidate_id: null,
+          heir_id: newHeirID,
         });
       }
       if (heirData.document.rename_doc) {
         await documentModel.createDocument({
           doc_path: heirData.document.rename_doc,
           doc_type: "rename_doc",
-          entity_type: "heir",
-          entity_id: newHeirID,
+          candidate_id: null,
+  heir_id: newHeirID,
         });
       }
     }

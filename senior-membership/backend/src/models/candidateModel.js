@@ -7,12 +7,12 @@ export const getAllCandidates = async() => {
 
 //สร้างผู้สมัคร
 export const createCandidate = async(candidateData) => {
-    const { title, first_name, last_name, national_id, dob, phone, gender, occupation, address_id, document_id, account_id, heir_id } = candidateData;
+    const { title, first_name, last_name, national_id, dob, phone, gender, occupation, address_id, account_id, heir_id } = candidateData;
   
   const { rows } = await query(
-    `INSERT INTO candidates (title, first_name, last_name, national_id, dob, phone, gender, occupation, address_id, document_id, account_id, heir_id) 
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING candidate_id`,
-    [title, first_name, last_name, national_id, dob, phone, gender, occupation, address_id, document_id, account_id, heir_id]
+    `INSERT INTO candidates (title, first_name, last_name, national_id, dob, phone, gender, occupation, address_id, account_id, heir_id) 
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING candidate_id`,
+    [title, first_name, last_name, national_id, dob, phone, gender, occupation, address_id,  account_id, heir_id]
   );
   return rows[0].candidate_id;
 }

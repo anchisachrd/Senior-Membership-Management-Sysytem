@@ -9,65 +9,57 @@ import * as candidateController from '../controllers/candidateController.js';
 
 const router = express.Router();
 
-/**
- * 1) fileFilter: restrict file types to PDF, JPG, PNG
- */
-const fileFilter = (req, file, cb) => {
-  const allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-  if (allowedMimeTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error('Invalid file type, only PDF, JPG, and PNG are allowed'), false);
-  }
-};
-
-/**
- * 2) Path to "uploads" folder (or "upload", whichever you prefer)
- */
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const uploadFolderPath = path.join(__dirname, '..', 'upload');
-
-// Ensure the folder exists
-if (!fs.existsSync(uploadFolderPath)) {
-  fs.mkdirSync(uploadFolderPath);
-}
-
-/**
- * 3) Configure Multer (storage + fileFilter)
- */
+// 1) Set up your disk storage
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadFolderPath);
+  destination: function (req, file, cb) {
+    // Where you want to store the files
+    cb(null, path.join(process.cwd(), "src", "upload"));
   },
-  filename: (req, file, cb) => {
-    // candidate_id_card-<unique>-<originalFileName>.pdf
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname);
+  filename: function (req, file, cb) {
+    // This helps ensure the filename is unique
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-const upload = multer({ storage, fileFilter });
+// 2) Define your file filter if needed (e.g. to restrict doc/image types)
+const fileFilter = (req, file, cb) => {
+  // Accept certain mime types, for example:
+  if (
+    file.mimetype === "application/pdf" ||
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png"
+  ) {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid file type. Only PDF, JPG, or PNG is allowed."), false);
+  }
+};
 
-/**
- * 4) Define which file fields you expect from the frontend
- *    e.g. Candidate doc fields + Heir doc fields
- */
-const candidateUploadFields = [
-  { name: 'candidate_house_registration', maxCount: 1 },
-  { name: 'candidate_id_card', maxCount: 1 },
-  { name: 'candidate_rename_doc', maxCount: 1 },
-  { name: 'candidate_med_certification', maxCount: 1 },
-  { name: 'heir_house_registration', maxCount: 1 },
-  { name: 'heir_id_card', maxCount: 1 },
-  { name: 'heir_rename_doc', maxCount: 1 },
-];
+// 3) Create Multer middleware
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+});
 
-/**
- * 5) POST /api/candidates (create candidate + heir)
- */
-router.post('/', upload.fields(candidateUploadFields), candidateController.createCandidateData);
+// 4) Tell Multer which fields you expect
+//    Using array syntax if you want multiple docs in the same field. 
+//    Or use .fields() if you have separate fields for each doc.
+const multipleUpload = upload.fields([
+  { name: "candidate_house_registration", maxCount: 1 },
+  { name: "candidate_id_card", maxCount: 1 },
+  { name: "candidate_rename_doc", maxCount: 1 },
+  { name: "candidate_med_certification", maxCount: 1 },
+
+  // For Heir 
+  { name: "heir_house_registration", maxCount: 1 },
+  { name: "heir_id_card", maxCount: 1 },
+  { name: "heir_rename_doc", maxCount: 1 },
+]);
+
+// 5) Use that middleware in the POST route to handle file uploads
+router.post("/", multipleUpload, candidateController.createCandidateData);
+
+
 
 /**
  * 6) GET /api/candidates/:id

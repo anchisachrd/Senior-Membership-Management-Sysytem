@@ -73,6 +73,38 @@ export const createCandidateData = async (req, res) => {
       },
     };
 
+        // 2) Now capture file paths from req.files and place them in candidateData / heirData
+        if (req.files?.candidate_house_registration) {
+          candidateData.document.house_registration =
+            "upload/" + req.files.candidate_house_registration[0].filename;
+        }
+        if (req.files?.candidate_id_card) {
+          candidateData.document.id_card =
+            "upload/" + req.files.candidate_id_card[0].filename;
+        }
+        if (req.files?.candidate_rename_doc) {
+          candidateData.document.rename_doc =
+            "upload/" + req.files.candidate_rename_doc[0].filename;
+        }
+        if (req.files?.candidate_med_certification) {
+          candidateData.document.med_certification =
+            "upload/" + req.files.candidate_med_certification[0].filename;
+        }
+    
+        // Heir documents
+        if (req.files?.heir_house_registration) {
+          heirData.document.house_registration =
+            "upload/" + req.files.heir_house_registration[0].filename;
+        }
+        if (req.files?.heir_id_card) {
+          heirData.document.id_card =
+            "upload/" + req.files.heir_id_card[0].filename;
+        }
+        if (req.files?.heir_rename_doc) {
+          heirData.document.rename_doc =
+            "upload/" + req.files.heir_rename_doc[0].filename;
+        }
+
     const result = await registerService.register(candidateData, heirData, req.files);
 
     return res.status(201).json({
