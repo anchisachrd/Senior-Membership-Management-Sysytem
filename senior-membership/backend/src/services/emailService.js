@@ -12,6 +12,8 @@ const transporter = nodemailer.createTransport(
     }
 );
 
+
+
 export const sendEmail = async (recipientEmail, subject, htmlMessage) => {
     try {
         const mailOptions = {
@@ -97,3 +99,15 @@ export const generatePasswordEmailTemplate = (recipientName, password) => `
 </html>
 `;
 
+
+export const generateConfirmationEmail = (candidateName) => {
+    return `
+      <h1>Thank you for registering!</h1>
+      <p>Dear ${candidateName},</p>
+      <p>We have successfully received your registration.</p>
+      <p>If your qualifications meet our requirements, we will contact you shortly.</p>
+      <p>Thank you for your interest in joining us.</p>
+      <p>Best regards,</p>
+      <p>Senior Club Team</p>
+    `;
+  };

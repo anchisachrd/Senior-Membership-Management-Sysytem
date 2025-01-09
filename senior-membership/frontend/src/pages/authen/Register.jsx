@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleCheck, FaRegEye, FaRegFile } from "react-icons/fa6";
+import { CiFileOn } from "react-icons/ci";
+import { FiEye } from "react-icons/fi";
+import { LuFile } from "react-icons/lu";
 import { Link } from "react-router";
 // Import the API helper
-import { createCandidate } from "../../api/candidateApi";
+import { createCandidate } from "../../api/registerApi";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { validationSchemaStep1, validationSchemaStep2 } from "./Validation"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import FileUpload from "../../components/FileUpload";
 
 // Define the provinces as a reusable array
 const provinces = [
@@ -31,29 +35,9 @@ const provinces = [
 
 // =============== STEP 1: Candidate Page ===============
 function RegisterPage1({ values, errors, touched, setFieldValue }) {
-  // Handle file input changes
-  const [previewUrls, setPreviewUrls] = useState({
-    candidate_house_registration: null,
-    candidate_id_card: null,
-    candidate_rename_doc: null,
-    candidate_med_certification: null,
-  });
-
-  // Enhanced file change handler
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    const file = files && files[0];
-    if (!file) return;
-
-    // 1) Store the file object in Formik
-    setFieldValue(name, file);
-
-    // 2) Generate a preview URL
-    const previewUrl = URL.createObjectURL(file);
-
-    // 3) Store that previewUrl in Formik as well, e.g. add "_preview"
-    //    If name == "candidate_house_registration", then field for preview might be "candidate_house_registration_preview"
-    setFieldValue(`${name}_preview`, previewUrl);
+    setFieldValue(name, files[0]);
   };
 
   return (
@@ -452,105 +436,45 @@ function RegisterPage1({ values, errors, touched, setFieldValue }) {
             </div>
           </div>
 
-          {/* File Uploads */}
-          <div className="mt-5">
-            <label htmlFor="candidate_house_registration" className="block mb-2 text-sm font-medium text-gray-900">
-              สำเนาทะเบียนบ้าน
-            </label>
-            <input
-              type="file"
-              name="candidate_house_registration"
-              id="candidate_house_registration"
-              onChange={handleFileChange}
-              className={`bg-light ${errors.candidate_house_registration && touched.candidate_house_registration
-                ? "bg-red-100"
-                : "border border-gray-400"
-                } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
-            />
-            {values.candidate_house_registration && (
-              <p className="mt-2 text-sm text-blue-500">
-                ไฟล์ปัจจุบัน: {values.candidate_house_registration.name}
-              </p>
-            )}
-            {/* Show preview (img or iframe) */}
-            {values.candidate_house_registration && (
-              <div className="mt-2">
-                <img
-                  src={values.candidate_house_registration_preview}
-                  alt="Preview"
-                  style={{ maxWidth: "200px", height: "auto" }}
-                />
-              </div>
-            )}
+          {/* House Registration Upload */}
+      <FileUpload
+        label="สำเนาทะเบียนบ้าน"
+        name="candidate_house_registration"
+        value={values.candidate_house_registration}
+        onChange={handleFileChange}
+        error={errors.candidate_house_registration}
+        touched={touched.candidate_house_registration}
+      />
 
-            <ErrorMessage name="candidate_house_registration" component="div" className="text-red-600 text-sm mt-1" />
-          </div>
+      {/* ID Card Upload */}
+      <FileUpload
+        label="สำเนาบัตรประชาชน"
+        name="candidate_id_card"
+        value={values.candidate_id_card}
+        onChange={handleFileChange}
+        error={errors.candidate_id_card}
+        touched={touched.candidate_id_card}
+      />
 
-          <div className="mt-5">
-            <label htmlFor="candidate_id_card" className="block mb-2 text-sm font-medium text-gray-900">
-              สำเนาบัตรประชาชน
-            </label>
-            <input
-              type="file"
-              name="candidate_id_card"
-              id="candidate_id_card"
-              onChange={handleFileChange} // Call the function when a file is selected
-              className={`bg-light ${errors.candidate_id_card && touched.candidate_id_card
-                ? "bg-red-100"
-                : "border border-gray-400"
-                } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
-            />
-            {values.candidate_id_card && (
-              <p className="mt-2 text-sm text-blue-500">
-                ไฟล์ปัจจุบัน: {values.candidate_id_card.name}
-              </p>
-            )}
-            <ErrorMessage name="candidate_id_card" component="div" className="text-red-600 text-sm mt-1" />
-          </div>
+      {/* Rename Document Upload */}
+      <FileUpload
+        label="ใบเปลี่ยนชื่อ (ถ้ามี)"
+        name="candidate_rename_doc"
+        value={values.candidate_rename_doc}
+        onChange={handleFileChange}
+        error={errors.candidate_rename_doc}
+        touched={touched.candidate_rename_doc}
+      />
 
-          <div className="mt-5">
-            <label htmlFor="candidate_rename_doc" className="block mb-2 text-sm font-medium text-gray-900">
-              ใบเปลี่ยนชื่อ (ถ้ามี)
-            </label>
-            <input
-              type="file"
-              name="candidate_rename_doc"
-              id="candidate_rename_doc"
-              onChange={handleFileChange} // Call the function when a file is selected
-              className={`bg-light ${errors.candidate_rename_doc && touched.candidate_rename_doc
-                ? "bg-red-100"
-                : "border border-gray-400"
-                } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
-            />
-            {values.candidate_rename_doc && (
-              <p className="mt-2 text-sm text-blue-500">
-                ไฟล์ปัจจุบัน: {values.candidate_rename_doc.name}
-              </p>
-            )}
-            <ErrorMessage name="candidate_rename_doc" component="div" className="text-red-600 text-sm mt-1" />
-          </div>
-
-          <div className="mt-5">
-            <label htmlFor="candidate_med_certification" className="block mb-2 text-sm font-medium text-gray-900">
-              ใบรับรองแพทย์
-            </label>
-            <input
-              type="file"
-              name="candidate_med_certification"
-              id="candidate_med_certification"
-              onChange={handleFileChange} // Call the function when a file is selected
-              className={`bg-light ${errors.candidate_med_certification && touched.candidate_med_certification
-                ? "bg-red-100"
-                : "border border-gray-400"
-                } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
-            />
-            {values.candidate_med_certification && (
-              <p className="mt-2 text-sm text-blue-500">
-                ไฟล์ปัจจุบัน: {values.candidate_med_certification.name}
-              </p>
-            )}
-            <ErrorMessage name="candidate_med_certification" component="div" className="text-red-600 text-sm mt-1" />
-          </div>
+      {/* Medical Certificate Upload */}
+      <FileUpload
+        label="ใบรับรองแพทย์"
+        name="candidate_med_certification"
+        value={values.candidate_med_certification}
+        onChange={handleFileChange}
+        error={errors.candidate_med_certification}
+        touched={touched.candidate_med_certification}
+      />
 
         </div>
       </div>
@@ -565,6 +489,8 @@ function RegisterPage2({ values, setFieldValue, errors, touched }) {
     const { name, files } = e.target;
     setFieldValue(name, files[0]);
   };
+
+
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
@@ -971,72 +897,36 @@ function RegisterPage2({ values, setFieldValue, errors, touched }) {
             </div>
           </div>
 
-          {/* Heir Documents */}
-          <div>
-            <label htmlFor="heir_house_registration" className="block mb-2 text-sm font-medium text-gray-900">
-              สำเนาทะเบียนบ้าน
-            </label>
-            <input
-              type="file"
-              name="heir_house_registration"
-              id="heir_house_registration"
-              onChange={handleFileChange}
-              className={`bg-light ${errors.heir_house_registration && touched.heir_house_registration
-                ? "bg-red-100"
-                : "border border-gray-400"
-                } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
-            />
-            {values.heir_house_registration && (
-              <p className="mt-2 text-sm text-blue-500">
-                ไฟล์ปัจจุบัน: {values.heir_house_registration.name}
-              </p>
-            )}
-            <ErrorMessage name="heir_house_registration" component="div" className="text-red-600 text-sm mt-1" />
-          </div>
+             {/* House Registration Upload */}
+      <FileUpload
+        label="สำเนาทะเบียนบ้าน"
+        name="heir_house_registration"
+        value={values.heir_house_registration}
+        onChange={handleFileChange}
+        error={errors.heir_house_registration}
+        touched={touched.heir_house_registration}
+      />
 
-          <div className="mt-5">
-            <label htmlFor="heir_id_card" className="block mb-2 text-sm font-medium text-gray-900">
-              สำเนาบัตรประชาชน
-            </label>
-            <input
-              type="file"
-              name="heir_id_card"
-              id="heir_id_card"
-              onChange={handleFileChange}
-              className={`bg-light ${errors.heir_id_card && touched.heir_id_card
-                ? "bg-red-100"
-                : "border border-gray-400"
-                } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
-            />
-            {values.heir_id_card && (
-              <p className="mt-2 text-sm text-blue-500">
-                ไฟล์ปัจจุบัน: {values.heir_id_card.name}
-              </p>
-            )}
-            <ErrorMessage name="heir_id_card" component="div" className="text-red-600 text-sm mt-1" />
-          </div>
+      {/* ID Card Upload */}
+      <FileUpload
+        label="สำเนาบัตรประชาชน"
+        name="heir_id_card"
+        value={values.heir_id_card}
+        onChange={handleFileChange}
+        error={errors.heir_id_card}
+        touched={touched.heir_id_card}
+      />
 
-          <div className="mt-5">
-            <label htmlFor="heir_rename_doc" className="block mb-2 text-sm font-medium text-gray-900">
-              ใบเปลี่ยนชื่อ (ถ้ามี)
-            </label>
-            <input
-              type="file"
-              name="heir_rename_doc"
-              id="heir_rename_doc"
-              onChange={handleFileChange}
-              className={`bg-light ${errors.heir_rename_doc && touched.heir_rename_doc
-                ? "bg-red-100"
-                : "border border-gray-400"
-                } text-gray-900 text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500`}
-            />
-            {values.heir_rename_doc && (
-              <p className="mt-2 text-sm text-blue-500">
-                ไฟล์ปัจจุบัน: {values.heir_rename_doc.name}
-              </p>
-            )}
-            <ErrorMessage name="heir_rename_doc" component="div" className="text-red-600 text-sm mt-1" />
-          </div>
+      {/* Rename Document Upload */}
+      <FileUpload
+        label="ใบเปลี่ยนชื่อ (ถ้ามี)"
+        name="heir_rename_doc"
+        value={values.heir_rename_doc}
+        onChange={handleFileChange}
+        error={errors.heir_rename_doc}
+        touched={touched.heir_rename_doc}
+      />
+
 
         </div>
       </div>
@@ -1102,7 +992,6 @@ function Register() {
     candidate_province: "",
     candidate_postal_code: "",
     candidate_house_registration: null,
-    candidate_house_registration_preview: null,
     candidate_id_card: null,
     candidate_rename_doc: null,
     candidate_med_certification: null,
