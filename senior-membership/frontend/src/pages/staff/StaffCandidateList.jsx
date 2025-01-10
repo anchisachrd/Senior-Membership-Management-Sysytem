@@ -1,14 +1,14 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa6";
 
 
 function StaffCandidateList() {
 
-  const navigate = useNavigate(); // ใช้ useNavigate แทน useHistory
+  const navigate = useNavigate();
 
   const handleRowClick = () => {
-    navigate('/staff_candidateProfile'); // เปลี่ยนไปยังหน้ารายละเอียดผู้สมัคร
+    navigate('/staff_candidateProfile'); 
   }
   
   return (
@@ -16,7 +16,7 @@ function StaffCandidateList() {
       <div class="p-12 sm:ml-64">
         <div class="text-xl text-black mx-3 mt-5 mb-8 font-bold">จัดการผู้สมัคร</div>
 
-        <div class='mb-8 overflow-hidden'>
+                      <div class='mb-8 overflow-hidden'>
           <div class="grid gap-6 md:grid-cols-4">
             <form class="max-w-3xl">
               <label for="default-search" class="mb-2 text-sm font-medium text-gray-200 sr-only dark:text-white">ค้นหา</label>
@@ -36,6 +36,12 @@ function StaffCandidateList() {
           </div>
         </div>
 
+
+        <button
+            type="button" 
+            className="focus:outline-none text-white focus:ring-gray-300 font-medium rounded-lg text-base px-4 py-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800 mb-7">
+            <Link to='/staff_cadidateWaitingList'>แถวคอยการสมัคร</Link>
+          </button>
 
         <div class="relative overflow-hidden shadow-xl sm:rounded-lg">
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
