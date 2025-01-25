@@ -2,7 +2,7 @@ import { query } from "../db.js"
 
 export const getAllCandidates = async() => {
     const {rows} = await query('SELECT * FROM candidates');
-    return rows[0];
+    return rows.length > 0 ? rows : [];;
 }
 
 //สร้างผู้สมัคร
@@ -16,8 +16,6 @@ export const createCandidate = async(candidateData) => {
   );
   return rows[0].candidate_id;
 }
-
-
 
 
 export const getCandidateById = async (id) => {

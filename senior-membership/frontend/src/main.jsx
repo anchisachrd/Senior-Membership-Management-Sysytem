@@ -31,7 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='/committe_candidateProfile' element={ <CommitteCandidateProfile />} />
         <Route path='/staff_candidateList' element={ < StaffCandidateList/>} />
         <Route path='/staff_cadidateWaitingList' element={ < CadidateWaitingList />} />
-        <Route path='/staff_candidateProfile' element={ < StaffCandidateProfile/>} />
+        <Route path='/staff_candidateProfile/:id' element={ < StaffCandidateProfile/>} />
       </Route>
       
       {/* หน้าที่ไม่ต้องมี side bar */}

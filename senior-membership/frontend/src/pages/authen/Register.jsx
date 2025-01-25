@@ -138,7 +138,6 @@ function RegisterPage1({ values, errors, touched, setFieldValue }) {
                 type="date"
                 name="candidate_dob"
                 id="candidate_dob"
-                placeholder="1"
                 className={`bg-light ${errors.candidate_dob && touched.candidate_dob
                   ? "bg-red-100"
                   : "border border-gray-400"

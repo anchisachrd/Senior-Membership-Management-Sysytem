@@ -96,7 +96,7 @@ export const createCandidate = async (candidateData, heirData) => {
     // 3) Same Address 
     //--------------------------------------------
     formData.append("sameAddress", heirData.sameAddress ? "true" : "false");
-    
+
 
     //--------------------------------------------
     // 4) Send to Backend
@@ -107,7 +107,7 @@ export const createCandidate = async (candidateData, heirData) => {
       },
     });
 
-   
+
 
 
     return response.data; // The backend returns { success, data, message }
@@ -117,12 +117,22 @@ export const createCandidate = async (candidateData, heirData) => {
   }
 };
 
-// export const getCandidates = async () => {
-//   try {
-//     const response = await axios.get(apiUrl);
-//     return response.data;  // Return the API response
-//   } catch (error) {
-//     console.error("There was an error fetchiang candidates:", error);
-//     throw error;
-//   }
-// };
+export const getAllCandidates = async () => {
+  try {
+    const response = await axios.get(apiUrl);
+    return response.data;  // Return the API response
+  } catch (error) {
+    console.error("There was an error fetching candidates:", error);
+    throw error;
+  }
+};
+
+export const getCandidateAndHeirById = async (id) => {
+  try {
+    const response = await axios.get(`${apiUrl}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("There was an error fetching candidate id:", error);
+    throw error;
+  }
+};

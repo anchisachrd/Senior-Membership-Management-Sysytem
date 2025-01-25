@@ -58,6 +58,8 @@ const multipleUpload = upload.fields([
 
 // 5) Use that middleware in the POST route to handle file uploads
 router.post("/", multipleUpload, candidateController.createCandidateData);
+router.get('/', candidateController.getCandidates);
+router.get('/:id', candidateController.getCandidateandHeirById); 
 
 
 
