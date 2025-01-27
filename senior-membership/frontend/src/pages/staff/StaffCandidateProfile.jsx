@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getCandidateAndHeirById } from "../../api/registerApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { getCandidateAndHeirById, updateCandidateStatus} from "../../api/candidateApi";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { LuFile } from "react-icons/lu";
+import { FiEye } from "react-icons/fi";
+import DocumentPreview from "../../components/DocumentPreview";
 
 function Information_personal({ data }) {
   return (
@@ -297,61 +300,25 @@ function Information_personal({ data }) {
             2. เอกสารของผู้สมัคร
           </p>
 
-          <div>
-            <label
-              for="copy_house_member"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              สำเนาทะเบียนบ้าน
-            </label>
-            <input
-              type="file"
-              id="copy_house_member"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-            />
-          </div>
+          <DocumentPreview
+            label="สำเนาทะเบียนบ้าน"
+            docPath={data.documents?.house_registration}
+          />
 
-          <div class="mt-5">
-            <label
-              for="copy_id_member"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              สำเนาบัตรประชาชน
-            </label>
-            <input
-              type="file"
-              id="copy_id_member"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-            />
-          </div>
+          <DocumentPreview
+            label="สำเนาบัตรประชาชน"
+            docPath={data.documents?.id_card}
+          />
 
-          <div class="mt-5">
-            <label
-              for="doc_rename_member"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              ใบเปลี่ยนชื่อ
-            </label>
-            <input
-              type="file"
-              id="doc_rename_member"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-            />
-          </div>
+          <DocumentPreview
+            label="ใบเปลี่ยนชื่อ"
+            docPath={data.documents?.rename_doc}
+          />
 
-          <div class="mt-5">
-            <label
-              for="cer_med_member"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              ใบรับรองแพทย์
-            </label>
-            <input
-              type="file"
-              id="cer_med_member"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-            />
-          </div>
+          <DocumentPreview
+            label="ใบรับรองแพทย์"
+            docPath={data.documents?.med_certification}
+          />
         </div>
       </div>
     </div>
@@ -359,7 +326,6 @@ function Information_personal({ data }) {
 }
 
 function Information_heir({ data }) {
-
   return (
     <div>
       {/* กล่อง  3 */}
@@ -651,7 +617,7 @@ function Information_heir({ data }) {
               </label>
               <input
                 type="text"
-                value={data.address.house_num}
+                value={data.address.postal_code}
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
                 readOnly
               />
@@ -667,50 +633,20 @@ function Information_heir({ data }) {
             4. เอกสารของทายาท
           </p>
 
-          <div>
-            <label
-              for="copy_house_heir"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              สำเนาทะเบียนบ้าน
-            </label>
-            <input
-              type="file"
-              id="copy_house_heir"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
-            />
-          </div>
+          <DocumentPreview
+            label="สำเนาทะเบียนบ้าน"
+            docPath={data.documents?.house_registration}
+          />
 
-          <div class="mt-5">
-            <label
-              for="copy_id_heir"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              สำเนาบัตรประชาชน
-            </label>
-            <input
-              type="file"
-              id="copy_id_heir"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
-            />
-          </div>
+          <DocumentPreview
+            label="สำเนาบัตรประชาชน"
+            docPath={data.documents?.id_card}
+          />
 
-          <div class="mt-5">
-            <label
-              for="doc_rename_heir"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              ใบเปลี่ยนชื่อ
-            </label>
-            <input
-              type="file"
-              id="doc_rename_heir"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
-            />
-          </div>
+          <DocumentPreview
+            label="ใบเปลี่ยนชื่อ"
+            docPath={data.documents?.rename_doc}
+          />
         </div>
       </div>
     </div>
@@ -718,6 +654,8 @@ function Information_heir({ data }) {
 }
 function StaffCandidateProfile() {
   const { id } = useParams();
+  const location = useLocation();
+  const { showButtons } = location.state || { showButtons: false };
 
   const [candidate, setCandidate] = useState(null);
   const [heir, setHeir] = useState(null);
@@ -745,10 +683,16 @@ function StaffCandidateProfile() {
     setIsModalOpen(!isModalOpen);
   };
 
-  const ConfirmModal = () => {
-    alert("ยืนยันแล้วค่ะ/ครับ");
-    setIsModalOpen(!isModalOpen);
-    navigate("/staff_candidateList");
+  const ConfirmModal = async () => {
+    try {
+      await updateCandidateStatus(id);
+      alert("สถานะเอกสารถูกเปลี่ยนเป็น 'ผ่านการตรวจสอบ'");
+      setIsModalOpen(false);
+      navigate("/staff_candidateList");
+    } catch (error) {
+      alert("เกิดข้อผิดพลาดในการอัปเดตสถานะ");
+      console.error(error);
+    }
   };
 
   const toggleModalCancel = () => {
@@ -811,7 +755,7 @@ function StaffCandidateProfile() {
           {activeTab === "heirInfo" && heir && <Information_heir data={heir} />}
         </div>
 
-        <div class="relative mt-14 flex justify-center items-center">
+        {showButtons && (<div class="relative mt-14 flex justify-center items-center">
           <button
             type="button"
             onClick={toggleModal}
@@ -974,6 +918,7 @@ function StaffCandidateProfile() {
             </div>
           )}
         </div>
+        )}
       </div>
     </div>
   );

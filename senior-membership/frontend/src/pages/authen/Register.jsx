@@ -5,7 +5,7 @@ import { FiEye } from "react-icons/fi";
 import { LuFile } from "react-icons/lu";
 import { Link } from "react-router";
 // Import the API helper
-import { createCandidate } from "../../api/registerApi";
+import { createCandidate } from "../../api/candidateApi";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { validationSchemaStep1, validationSchemaStep2 } from "./Validation"
 import DatePicker from "react-datepicker";

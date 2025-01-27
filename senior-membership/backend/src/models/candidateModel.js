@@ -28,6 +28,17 @@ export const getCandidateById = async (id) => {
     return rows[0];
   };
 
+  export const updateDocVerificationStatus = async (candidateId, status) => {
+    const { rows } = await query(
+        `UPDATE candidates
+         SET doc_verification_status = $1
+         WHERE candidate_id = $2
+         RETURNING *`,
+        [status, candidateId]
+    );
+    return rows[0];
+
+};
   export const updateCandidateHeirID = async (candidateId, heirId) => {
     const { rows } = await query(
       `UPDATE candidates
@@ -38,3 +49,24 @@ export const getCandidateById = async (id) => {
     );
     return rows[0];
   };
+
+  export const getDocsVerifiedCandidates = async () => {
+    const { rows } = await query(
+        `SELECT * FROM candidates WHERE doc_verification_status = $1`,
+        ['ผ่านการตรวจสอบ']
+    );
+    return rows;
+};
+
+export const updateApprovalStatus = async (candidateId, status) => {
+  const { rows } = await query(
+      `UPDATE candidates
+       SET approval_status = $1
+       WHERE candidate_id = $2
+       RETURNING *`,
+      [status, candidateId]
+  );
+  return rows[0];
+
+};
+  

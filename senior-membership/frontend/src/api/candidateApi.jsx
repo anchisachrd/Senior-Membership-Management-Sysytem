@@ -136,3 +136,34 @@ export const getCandidateAndHeirById = async (id) => {
     throw error;
   }
 };
+
+export const updateCandidateStatus = async (candidateId) => {
+  try {
+      const response = await axios.put(`${apiUrl}/${candidateId}/verify`);
+      return response.data;
+  } catch (error) {
+      console.error("Error updating document verification status:", error);
+      throw error;
+  }
+};
+
+export const getVerifiedCandidates = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}/verified`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching verified candidates:", error);
+    throw error;
+  }
+};
+
+export const sendToCommittee = async (candidateId) => {
+  try {
+    const response = await axios.put(`${apiUrl}/send-to-committee/${candidateId}`);
+    console.log("response: ", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating approval status:", error);
+    throw error;
+  }
+};

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa6";
-import { getAllCandidates } from '../../api/registerApi';
+import { getAllCandidates } from '../../api/candidateApi';
 
 
 function StaffCandidateList() {
@@ -9,7 +9,7 @@ function StaffCandidateList() {
     const navigate = useNavigate();
 
     const handleRowClick = (candidateId) => {
-        navigate(`/staff_candidateProfile/${candidateId}`);
+        navigate(`/staff_candidateProfile/${candidateId}`,  { state: { showButtons: true } });
     }
 
     useEffect(() => {
@@ -17,7 +17,10 @@ function StaffCandidateList() {
           try {
               const data = await getAllCandidates();
               console.log("API Response:", data);
-              setCandidates(data); 
+
+              //เอาข้อมูลที่เป็นผ่านการตรวจสอบออก เพราะให้ไปโชว์ในแถวคอยแทน
+              const filteredCandidates = data.filter(candidate => candidate.doc_verification_status !== 'ผ่านการตรวจสอบ');
+              setCandidates(filteredCandidates); 
           } catch (error) {
               console.error('Error:', error);
               setCandidates([]); 
@@ -98,9 +101,9 @@ function StaffCandidateList() {
                                         <td className="px-6 py-4">{candidate.first_name} {candidate.last_name}</td>
                                         <td className="px-6 py-4">{candidate.national_id}</td>
                                         <td className="px-6 py-4">{candidate.phone}</td>
-                                        <td className="px-14 py-4">{candidate.priority ? <FaCheck /> : <FaCheck />}</td>
+                                        <td className="px-14 py-4">{candidate.priority ? <FaCheck /> : '-' }</td>
                                         <td className="px-6 py-4">{candidate.doc_verification_status}</td>
-                                        <td className="px-6 py-4">{candidate.is_approved ? 'อนุมัติแล้ว' : 'กำลังตรวจสอบ'}</td>
+                                        <td className="px-6 py-4">{candidate.approval_status}</td>
 
                                     </tr>
                                 ))

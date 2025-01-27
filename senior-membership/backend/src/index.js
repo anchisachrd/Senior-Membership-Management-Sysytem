@@ -3,7 +3,6 @@ import cors from 'cors'
 import candidateRoutes from "./routes/candidateRoute.js"
 import * as accountModel from "../src/models/accountModel.js";
 import bcrypt from "bcrypt"
-import jwt from 'jsonwebtoken';
 
 
 
