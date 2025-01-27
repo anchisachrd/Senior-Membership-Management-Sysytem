@@ -7,8 +7,8 @@ import { TiDocumentText } from "react-icons/ti";
 import { Link } from "react-router";
 
 function Sidebar() {
-  // const role = 'member';
-  const role = 'heir';
+  const role = 'member';
+  // const role = 'heir';
   return (
 
     <div className='ibm-plex-sans-thai-medium'>

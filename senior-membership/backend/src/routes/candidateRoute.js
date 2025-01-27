@@ -63,6 +63,8 @@ router.get('/:id', candidateController.getCandidateandHeirById);
 
 
 
+
+
 /**
  * 6) GET /api/candidates/:id
  */
