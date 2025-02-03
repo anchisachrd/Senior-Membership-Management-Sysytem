@@ -1,43 +1,87 @@
-import { useNavigate, useParams  } from "react-router-dom";
-import React, { useEffect, useState} from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
-import { getVerifiedCandidates, sendToCommittee } from "../../api/candidateApi";
+import { getVerifiedCandidates, sendToCommittee, deleteCandidate } from "../../api/candidateApi";
+import ConfirmModal from "../../components/ConfirmModal";
 
 function CadidateWaitingList() {
   const { id } = useParams();
   const [candidates, setCandidates] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalDescription, setModalDescription] = useState("");
+  const [onConfirmAction, setOnConfirmAction] = useState(() => {});
+
   const navigate = useNavigate();
 
   const handleRowClick = (candidateId) => {
     navigate(`/staff_candidateProfile/${candidateId}`, {
-      state: { showButtons: false },
+      state: { context : 'waitingCandidateProfile' },
     });
   };
+
+  const fetchCandidates = async () => {
+    try {
+      const data = await getVerifiedCandidates();
+      setCandidates(data);
+    } catch (error) {
+      console.error("Failed to fetch candidates:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCandidates(); // Fetch initial data 
+  }, []);
 
   const handleSentdata = async (candidateId) => {
     try {
       await sendToCommittee(candidateId);
-      alert("เอกสารถูกส่งไปที่กรรมการ");
+
+      await fetchCandidates();
     } catch (error) {
       alert("เกิดข้อผิดพลาดในการส่งข้อมูลไปที่กรรมการ");
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    const fetchCandidates = async () => {
-      try {
-        const data = await getVerifiedCandidates();
-        setCandidates(data);
-      } catch (error) {
-        console.error("Failed to fetch candidates:", error);
-      }
-    };
-    fetchCandidates();
-  }, []);
+  const handleDeleteCandidate = async (candidateId) => {
+    try {
+      deleteCandidate(candidateId);
+      alert('deleted');
+      
+      await fetchCandidates();
+    } catch (error) {
+      alert("Failed to delete candidate");
+    }
+  };
 
+ 
+
+  const openModal = (title, description, action) => {
+    setModalTitle(title);
+    setModalDescription(description);
+    setOnConfirmAction(() => action); 
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+ 
   return (
     <div className="ibm-plex-sans-thai-medium">
+      {/* Confirmation Modal*/}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        title={modalTitle}
+        description={modalDescription}
+        onConfirm={() => {
+          onConfirmAction();
+          closeModal();
+        }}
+        onCancel={closeModal}
+      />
       <div class="p-12 sm:ml-64">
         <div class="text-xl text-black mx-3 mt-5 mb-8 font-bold">
           แถวคอยการสมัคร
@@ -143,17 +187,32 @@ function CadidateWaitingList() {
                     <td className="px-6 py-4">
                       {candidate.doc_verification_status}
                     </td>
-                    <td className="px-6 py-4">
-                      {candidate.approval_status}
-                    </td>
+                    <td className="px-6 py-4">{candidate.approval_status}</td>
                     <td className="px-6 py-4 space-x-4">
-                      <button 
-                       onClick={() => handleSentdata(candidate.candidate_id)}
-                      className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openModal(
+                            "ยืนยันการส่งข้อมูลกรรมการ",
+                            "คุณต้องการส่งข้อมูลไปที่กรรมการหรือไม่?",
+                            () => handleSentdata(candidate.candidate_id)
+                          );
+                        }}
+                        className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                      >
                         ส่งข้อมูล
                       </button>
-                      <button className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
-                        ลบออก
+                      <button
+                       onClick={(e) => {
+                        e.stopPropagation();
+                        openModal(
+                          "ยืนยันการลบข้อมูล",
+                          "คุณต้องการลบข้อมูลผู้สมัครหรือไม่?",
+                          () => handleDeleteCandidate(candidate.candidate_id)
+                        );
+                      }}
+                       className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
+                        นำออก
                       </button>
                     </td>
                   </tr>

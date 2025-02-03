@@ -64,6 +64,7 @@ router.put('/:id/verify', candidateController.updateDocStatus);
 router.put('/send-to-committee/:candidateId', candidateController.sendToCommittee);
 router.post("/", candidateController.createCandidateData);
 router.get('/', candidateController.getCandidates);
+router.delete('/:candidateId', candidateController.deleteCandidate);
 
 
 /**

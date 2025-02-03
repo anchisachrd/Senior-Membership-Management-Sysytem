@@ -197,3 +197,14 @@ export const sendToCommittee = async (req, res) => {
   }
 };
 
+export const deleteCandidate = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    const candidates = await candidateService.removeCandidate(candidateId);
+    
+    res.status(200).json(candidates);
+} catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+}
+};

@@ -66,7 +66,7 @@ function CommitteCandidateList() {
             </thead>
 
             <tbody>
-              <tr onClick={handleRowClick} class="cursor-pointer bg-white border-b dark:bg-gray-200 dark:border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-200 text-gray-900">
+              <tr onClick={handleRowClick} class="cursor-pointer bg-whiteborder-b dark:bg-gray-200 dark:border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-200 text-gray-900">
                 <th scope="row" class="px-8 py-4 font-medium">
                   1.
                 </th>

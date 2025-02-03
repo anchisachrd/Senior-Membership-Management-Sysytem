@@ -9,7 +9,7 @@ function StaffCandidateList() {
     const navigate = useNavigate();
 
     const handleRowClick = (candidateId) => {
-        navigate(`/staff_candidateProfile/${candidateId}`,  { state: { showButtons: true } });
+        navigate(`/staff_candidateProfile/${candidateId}`,  { state: { context: 'staffCandidateProfile' } });
     }
 
     useEffect(() => {

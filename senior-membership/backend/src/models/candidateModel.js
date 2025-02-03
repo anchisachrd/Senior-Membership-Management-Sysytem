@@ -28,6 +28,16 @@ export const getCandidateById = async (id) => {
     return rows[0];
   };
 
+  export const deleteCandidateById = async (id) => {
+    
+    const { rows } = await query(
+      `DELETE FROM candidates WHERE candidate_id = $1`,
+      [id]
+    );
+  
+    return rows[0];
+  };
+
   export const updateDocVerificationStatus = async (candidateId, status) => {
     const { rows } = await query(
         `UPDATE candidates

@@ -16,3 +16,6 @@ export const fetchAllVerifiedDocsCandidates = async () => {
     throw new Error('Error fetching verified docs candidates');
   }
 };
+
+export const removeCandidate = async (candidateId) => {
+  return await candidateModel.deleteCandidateById(candidateId);}

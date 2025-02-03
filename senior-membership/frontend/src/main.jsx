@@ -14,6 +14,10 @@ import StaffCandidateList from './pages/staff/StaffCandidateList.jsx'
 import CadidateWaitingList from './pages/staff/CadidateWaitingList.jsx'
 import StaffCandidateProfile from './pages/staff/StaffCandidateProfile.jsx'
 import SendNotify from './pages/staff/SendNotify.jsx'
+import CheckPayment from './pages/staff/CheckPayment.jsx'
+import DetailCheckPayment from './pages/staff/DetailCheckPayment.jsx'
+import SubmitPayment from './pages/payment/SubmitPayment.jsx'
+import History from './pages/payment/History.jsx'
 
 import SidebarStaff from './components/SidebarStaff.jsx'
 import Sidebar from './components/Sidebar.jsx'
@@ -25,15 +29,19 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
       <Route  element={ <Sidebar />}>
         <Route path='/deathReport' element={ <DeathReport />} />
+        <Route path='/submitPayment' element={ <SubmitPayment />} />
+        <Route path='/history' element={ <History />} />
       </Route>
 
       <Route  element={ <SidebarStaff />}>
         <Route path='/committee_candidateList' element={ <CommitteCandidateList />} />
         <Route path='/committee_candidateProfile' element={ <CommitteCandidateProfile />} />
+
         <Route path='/staff_candidateList' element={ < StaffCandidateList/>} />
         <Route path='/staff_cadidateWaitingList' element={ < CadidateWaitingList />} />
         <Route path='/staff_candidateProfile/:id' element={ < StaffCandidateProfile/>} />
         <Route path='/staff_sendNotify' element={ < SendNotify/>} />
+        <Route path='/checkPayment' element={ < CheckPayment/>} />
       </Route>
       
       {/* หน้าที่ไม่ต้องมี side bar */}
