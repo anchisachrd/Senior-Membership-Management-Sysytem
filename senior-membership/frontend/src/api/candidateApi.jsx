@@ -159,6 +159,17 @@ export const getVerifiedCandidates = async () => {
   }
 };
 
+export const getWatingApproveCandidate = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}/candidate-list`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching verified candidates:", error);
+    throw error;
+  }
+};
+
+
 // เปลี่ยน status จาก ยังไม่ได้ตรวจสอบ เป็น รอการตรวจสอบ
 export const sendToCommittee = async (candidateId) => {
   try {
@@ -175,6 +186,20 @@ export const deleteCandidate = async (candidateId) => {
   try {
     const response = await axios.delete(`${apiUrl}/${candidateId}`);
     console.log("response: ", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating approval status:", error);
+    throw error;
+  }
+};
+
+export const updateApprovalStatus = async (candidateId, status, failReasons) => {
+  try {
+    const response = await axios.put(`${apiUrl}/${candidateId}/approval-status`, {
+      status,
+      failReasons, // This is only for sending an email
+    });
+
     return response.data;
   } catch (error) {
     console.error("Error updating approval status:", error);

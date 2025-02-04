@@ -60,12 +60,21 @@ export const getCandidateById = async (id) => {
     return rows[0];
   };
 
-  export const getDocsVerifiedCandidates = async () => {
-    const { rows } = await query(
-        `SELECT * FROM candidates WHERE doc_verification_status = $1`,
-        ['ผ่านการตรวจสอบ']
-    );
-    return rows;
+
+export const getCandidateByDocVerification = async (status) => {
+  const { rows } = await query(
+      `SELECT * FROM candidates WHERE doc_verification_status = $1`,
+      [status]
+  );
+  return rows;
+};
+
+export const getCandidateByApprovalStatus = async (statuses) => {
+  const { rows } = await query(
+      `SELECT * FROM candidates WHERE approval_status = ANY($1)`,
+      [statuses]
+  );
+  return rows;
 };
 
 export const updateApprovalStatus = async (candidateId, status) => {

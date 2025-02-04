@@ -179,6 +179,15 @@ export const getVerifiedCandidates = async (req, res) => {
   }
 };
 
+export const getWaitingApproveCandidates = async (req, res) => {
+  try {
+      const candidates = await candidateService.fetchAllApprovalStatusCandidates();
+      res.status(200).json(candidates);
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching verified candidates', error });
+  }
+};
+
 export const sendToCommittee = async (req, res) => {
   try {
     const { candidateId } = req.params;
@@ -207,4 +216,23 @@ export const deleteCandidate = async (req, res) => {
     console.error("Database error:", error);
     res.status(500).json({ error: 'Internal Server Error' });
 }
+};
+
+export const updateCandidateApprovalStatus = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    const { status, failReasons } = req.body; // Get data from frontend
+
+    // if (!status || !email) {
+    //   return res.status(400).json({ message: "Missing required fields" });
+    // }
+
+    // Process the approval update and send an email
+    const updatedCandidate = await candidateService.approvalStatusUpdate(candidateId, status, failReasons);
+
+    return res.status(200).json({ message: "Approval status updated", candidate: updatedCandidate });
+  } catch (error) {
+    console.error("Error updating candidate status:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };

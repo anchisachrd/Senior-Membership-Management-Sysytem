@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   getCandidateAndHeirById,
-  updateCandidateStatus,sendToCommittee
+  updateCandidateStatus,
+  sendToCommittee,
+  updateApprovalStatus
 } from "../../api/candidateApi";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { LuFile } from "react-icons/lu";
 import { FiEye } from "react-icons/fi";
 import DocumentPreview from "../../components/DocumentPreview";
 import ConfirmModal from "../../components/ConfirmModal";
+import CommitteeVerification from "../../components/CommitteeVerification";
 
 function Information_personal({ data }) {
   return (
@@ -711,15 +714,38 @@ function StaffCandidateProfile() {
       console.error(error);
     }
   };
-  
+
   const handleSentdata = async () => {
     try {
       await sendToCommittee(id);
       alert("ส่งข้อมูลเรียบร้อย");
-      navigate("/staff_cadidateWaitingList"); 
+      navigate("/staff_cadidateWaitingList");
     } catch (error) {
       alert("เกิดข้อผิดพลาดในการส่งข้อมูลไปที่กรรมการ");
       console.error(error);
+    }
+  };
+
+  // 1. If ANY question is fail → set "ไม่ผ่านการตรวจสอบ"
+  const handleSubmitFail = async (failReasons) => {
+    try {
+       await updateApprovalStatus(id, "ไม่ผ่านการตรวจสอบ", failReasons);
+      alert("สถานะผู้สมัครถูกเปลี่ยนเป็น 'ไม่ผ่านการตรวจสอบ'");
+    } catch (error) {
+      console.error("Error updating approval status:", error);
+      alert("เกิดข้อผิดพลาดในการอัปเดตสถานะ");
+    }
+  };
+
+  // 2. If ALL are pass → set "ผ่านการตรวจสอบ" or maybe "รอการอนุมัติ"
+  const handleSubmitPass = async () => {
+    try {
+       await updateApprovalStatus(id, "ผ่านการตรวจสอบ");
+      alert("สถานะผู้สมัครถูกเปลี่ยนเป็น 'ผ่านการตรวจสอบ'");
+      navigate("/committee_candidateList"); // or wherever you want to go next
+    } catch (error) {
+      console.error("Error updating approval status:", error);
+      alert("เกิดข้อผิดพลาดในการอัปเดตสถานะ");
     }
   };
 
@@ -850,7 +876,7 @@ function StaffCandidateProfile() {
                 openModal(
                   "ไม่ผ่านการตรวจสอบ",
                   "โปรดเลือกเหตุผลที่ไม่ผ่านการตรวจสอบ",
-                 
+
                   () => handleRejectCandidate("ไม่ครบถ้วน")
                 )
               }
@@ -858,6 +884,15 @@ function StaffCandidateProfile() {
             >
               ไม่ผ่านการตรวจสอบ
             </button>
+          </div>
+        )}
+
+        {context === "committeeCandidateProfile" && (
+          <div className="relative mt-14 flex justify-center items-center gap-4">
+            <CommitteeVerification
+              onSubmitFail={(failReasons) => handleSubmitFail(failReasons)}
+              onSubmitPass={() => handleSubmitPass()}
+            />
           </div>
         )}
       </div>
