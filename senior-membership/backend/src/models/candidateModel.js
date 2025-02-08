@@ -28,6 +28,27 @@ export const getCandidateById = async (id) => {
     return rows[0];
   };
 
+  export const deleteCandidateById = async (id) => {
+    
+    const { rows } = await query(
+      `DELETE FROM candidates WHERE candidate_id = $1`,
+      [id]
+    );
+  
+    return rows[0];
+  };
+
+  export const updateDocVerificationStatus = async (candidateId, status) => {
+    const { rows } = await query(
+        `UPDATE candidates
+         SET doc_verification_status = $1
+         WHERE candidate_id = $2
+         RETURNING *`,
+        [status, candidateId]
+    );
+    return rows[0];
+
+};
   export const updateCandidateHeirID = async (candidateId, heirId) => {
     const { rows } = await query(
       `UPDATE candidates
@@ -38,3 +59,54 @@ export const getCandidateById = async (id) => {
     );
     return rows[0];
   };
+
+
+export const getCandidateByDocVerification = async (status) => {
+  const { rows } = await query(
+      `SELECT * FROM candidates WHERE doc_verification_status = $1`,
+      [status]
+  );
+  return rows;
+};
+
+export const getCandidateByApprovalStatus = async (statuses) => {
+  const { rows } = await query(
+      `SELECT * FROM candidates WHERE approval_status = ANY($1)`,
+      [statuses]
+  );
+  return rows;
+};
+
+export const updateApprovalStatus = async (candidateId, status) => {
+  const { rows } = await query(
+      `UPDATE candidates
+       SET approval_status = $1
+       WHERE candidate_id = $2
+       RETURNING *`,
+      [status, candidateId]
+  );
+  return rows[0];
+
+};
+
+export const getCandidateVerificationDetails = async (candidateId) => {
+  const { rows } = await query(
+    `SELECT verification_details 
+     FROM candidates 
+     WHERE candidate_id = $1`,
+    [candidateId]
+  );
+  return rows.length > 0 ? rows[0].verification_details : {}; 
+}; 
+
+export const updateCandidateVerificationDetails = async (candidateId, details) => {
+  const { rows } = await query(
+    `UPDATE candidates 
+     SET verification_details = $1 
+     WHERE candidate_id = $2 
+     RETURNING *`,
+    [details, candidateId]
+  );
+  return rows[0];
+};
+  

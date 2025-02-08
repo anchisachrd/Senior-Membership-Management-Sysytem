@@ -12,7 +12,7 @@ import CommitteCandidateProfile from './pages/committee/CommitteCandidateProfile
 import DeathReport from './pages/heir/DeathReport.jsx'
 import StaffCandidateList from './pages/staff/StaffCandidateList.jsx'
 import CadidateWaitingList from './pages/staff/CadidateWaitingList.jsx'
-import StaffCandidateProfile from './pages/staff/StaffCandidateProfile.jsx'
+import CandidateProfile from './pages/staff/CandidateProfile.jsx'
 import SendNotify from './pages/staff/SendNotify.jsx'
 import CheckPayment from './pages/staff/CheckPayment.jsx'
 import DetailCheckPayment from './pages/staff/DetailCheckPayment.jsx'
@@ -42,7 +42,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
         <Route path='/staff_candidateList' element={ < StaffCandidateList/>} />
         <Route path='/staff_cadidateWaitingList' element={ < CadidateWaitingList />} />
-        <Route path='/staff_candidateProfile/:id' element={ < StaffCandidateProfile/>} />
+        <Route path='/candidateProfile/:id' element={ < CandidateProfile/>} />
         <Route path='/staff_sendNotify' element={ < SendNotify/>} />
         <Route path='/staff_checkPayment' element={ < CheckPayment/>} />
         <Route path='/staff_detailCheckPayment' element={ < DetailCheckPayment/>} />

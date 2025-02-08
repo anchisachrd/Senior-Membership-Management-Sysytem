@@ -1,4 +1,5 @@
 import * as registerService from "../services/registerService.js";
+import * as candidateService from "../services/candidateService.js";
 
 
 
@@ -137,7 +138,7 @@ export const getCandidates = async (req, res) => {
 export const getCandidateandHeirById = async (req, res) => {
   try {
     const { id } = req.params;
-    const candidateData = await registerService.fetchCandidateHeirAndAddresses(id);
+    const candidateData = await registerService.fetchAllCandidateAndHeirData(id);
 
     if (!candidateData) {
       return res.status(404).json({ message: 'Candidate not found' });
@@ -149,3 +150,111 @@ export const getCandidateandHeirById = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+export const updateDocStatus = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const updatedCandidate = await candidateService.modifyDocVerificationStatus(id);
+
+      if (!updatedCandidate) {
+          return res.status(404).json({ message: 'Candidate not found' });
+      }
+
+      res.status(200).json({
+          success: true,
+          message: 'Document verification status updated to "ผ่านการตรวจสอบ"',
+          data: updatedCandidate,
+      });
+  } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getVerifiedCandidates = async (req, res) => {
+  try {
+      const candidates = await candidateService.fetchAllVerifiedDocsCandidates();
+      res.status(200).json(candidates);
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching verified candidates', error });
+  }
+};
+
+export const getWaitingApproveCandidates = async (req, res) => {
+  try {
+      const candidates = await candidateService.fetchAllApprovalStatusCandidates();
+      res.status(200).json(candidates);
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching verified candidates', error });
+  }
+};
+
+export const sendToCommittee = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    console.log("Received candidateId:", candidateId);  // Debug log
+    if (!candidateId) {
+      return res.status(400).json({ message: "Candidate ID is required" });
+    }
+    const updatedApprovalStatus = await candidateService.sendCandidateToCommittee(candidateId);
+    res.status(200).json({
+      success: true,
+      message: 'Approval status updated to "รอการตรวจสอบ"',
+      data: updatedApprovalStatus,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error sending candidate to committee' });
+  }
+};
+
+export const deleteCandidate = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    const candidates = await candidateService.removeCandidate(candidateId);
+    
+    res.status(200).json(candidates);
+} catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+}
+};
+
+export const updateCandidateApprovalStatus = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    const { status, failReasons } = req.body; // Get data from frontend
+
+    // if (!status || !email) {
+    //   return res.status(400).json({ message: "Missing required fields" });
+    // }
+
+    // Process the approval update and send an email
+    const updatedCandidate = await candidateService.approvalStatusUpdate(candidateId, status, failReasons);
+
+    return res.status(200).json({ message: "Approval status updated", candidate: updatedCandidate });
+  } catch (error) {
+    console.error("Error updating candidate status:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getVerificationDetails = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    const details = await candidateService.getCandidateVerificationDetail(candidateId);
+    res.json(details);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching verification details", error });
+  }
+};
+export const updateVerificationDetails = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    const { details } = req.body;
+
+    const updatedCandidate = await candidateService.updateCandidateVerificationDetail(candidateId, details);
+    res.json(updatedCandidate);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating verification details", error });
+  }
+};
+

@@ -8,9 +8,8 @@ import { FaRegCircleCheck } from "react-icons/fa6";
 import { Link } from "react-router";
 
 function SidebarStaff() {
-  // const role = 'committee';
+  //const role = 'committee';
   const role = 'staff';
-  
   return (
     <div className='ibm-plex-sans-thai-medium'>
     <button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -24,7 +23,7 @@ function SidebarStaff() {
     <aside id="sidebar-multi-level-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
       <div class="h-full px-4 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-100">
         <a href="" class="flex items-center mb-5">
-          <img src="logo.png"
+          <img src="public/logo.png"
             class="h-auto max-w-full" alt="Logo" />
         </a>
         {/* side bar กรรมการ */}

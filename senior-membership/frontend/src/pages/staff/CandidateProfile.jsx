@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getCandidateAndHeirById } from "../../api/registerApi";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  getCandidateAndHeirById,
+  updateCandidateStatus,
+  sendToCommittee,
+  updateApprovalStatus,
+} from "../../api/candidateApi";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { LuFile } from "react-icons/lu";
+import { FiEye } from "react-icons/fi";
+import DocumentPreview from "../../components/DocumentPreview";
+import ConfirmModal from "../../components/ConfirmModal";
+import CommitteeVerification from "../../components/CommitteeVerification";
 
 function Information_personal({ data }) {
   return (
@@ -297,61 +307,25 @@ function Information_personal({ data }) {
             2. เอกสารของผู้สมัคร
           </p>
 
-          <div>
-            <label
-              for="copy_house_member"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              สำเนาทะเบียนบ้าน
-            </label>
-            <input
-              type="file"
-              id="copy_house_member"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-            />
-          </div>
+          <DocumentPreview
+            label="สำเนาทะเบียนบ้าน"
+            docPath={data.documents?.house_registration}
+          />
 
-          <div class="mt-5">
-            <label
-              for="copy_id_member"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              สำเนาบัตรประชาชน
-            </label>
-            <input
-              type="file"
-              id="copy_id_member"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-            />
-          </div>
+          <DocumentPreview
+            label="สำเนาบัตรประชาชน"
+            docPath={data.documents?.id_card}
+          />
 
-          <div class="mt-5">
-            <label
-              for="doc_rename_member"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              ใบเปลี่ยนชื่อ
-            </label>
-            <input
-              type="file"
-              id="doc_rename_member"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-            />
-          </div>
+          <DocumentPreview
+            label="ใบเปลี่ยนชื่อ"
+            docPath={data.documents?.rename_doc}
+          />
 
-          <div class="mt-5">
-            <label
-              for="cer_med_member"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              ใบรับรองแพทย์
-            </label>
-            <input
-              type="file"
-              id="cer_med_member"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-            />
-          </div>
+          <DocumentPreview
+            label="ใบรับรองแพทย์"
+            docPath={data.documents?.med_certification}
+          />
         </div>
       </div>
     </div>
@@ -359,7 +333,6 @@ function Information_personal({ data }) {
 }
 
 function Information_heir({ data }) {
-
   return (
     <div>
       {/* กล่อง  3 */}
@@ -651,7 +624,7 @@ function Information_heir({ data }) {
               </label>
               <input
                 type="text"
-                value={data.address.house_num}
+                value={data.address.postal_code}
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
                 readOnly
               />
@@ -667,64 +640,39 @@ function Information_heir({ data }) {
             4. เอกสารของทายาท
           </p>
 
-          <div>
-            <label
-              for="copy_house_heir"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              สำเนาทะเบียนบ้าน
-            </label>
-            <input
-              type="file"
-              id="copy_house_heir"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
-            />
-          </div>
+          <DocumentPreview
+            label="สำเนาทะเบียนบ้าน"
+            docPath={data.documents?.house_registration}
+          />
 
-          <div class="mt-5">
-            <label
-              for="copy_id_heir"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              สำเนาบัตรประชาชน
-            </label>
-            <input
-              type="file"
-              id="copy_id_heir"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
-            />
-          </div>
+          <DocumentPreview
+            label="สำเนาบัตรประชาชน"
+            docPath={data.documents?.id_card}
+          />
 
-          <div class="mt-5">
-            <label
-              for="doc_rename_heir"
-              class="block mb-2 text-sm font-medium text-gray-900"
-            >
-              ใบเปลี่ยนชื่อ
-            </label>
-            <input
-              type="file"
-              id="doc_rename_heir"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-grey-500 focus:border-grey-500 block w-full p-2.5"
-              placeholder="กรอกหมายเลขโทรศัพท์ของผู้สมัคร"
-            />
-          </div>
+          <DocumentPreview
+            label="ใบเปลี่ยนชื่อ"
+            docPath={data.documents?.rename_doc}
+          />
         </div>
       </div>
     </div>
   );
 }
-function StaffCandidateProfile() {
+function CandidateProfile() {
   const { id } = useParams();
+  const location = useLocation();
+  const { context } = location.state || { context: null };
 
   const [candidate, setCandidate] = useState(null);
   const [heir, setHeir] = useState(null);
 
   const [activeTab, setActiveTab] = useState("personalInfo");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalOpenCancel, setIsModalOpenCancel] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalDescription, setModalDescription] = useState("");
+  const [onConfirmAction, setOnConfirmAction] = useState(() => {});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -741,242 +689,224 @@ function StaffCandidateProfile() {
     fetchCandidateAndHeirData();
   }, [id]);
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  // const toggleModal = () => {
+  //   setIsModalOpen(!isModalOpen);
+  // };
+
+  const openModal = (title, description, confirmCallback) => {
+    setModalTitle(title);
+    setModalDescription(description);
+    setOnConfirmAction(() => confirmCallback);
+    setIsModalOpen(true);
   };
 
-  const ConfirmModal = () => {
-    alert("ยืนยันแล้วค่ะ/ครับ");
-    setIsModalOpen(!isModalOpen);
-    navigate("/staff_candidateList");
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  const toggleModalCancel = () => {
-    setIsModalOpenCancel(!isModalOpenCancel);
+  const handleApproveCandidate = async () => {
+    try {
+      await updateCandidateStatus(id);
+      alert("สถานะเอกสารถูกเปลี่ยนเป็น 'ผ่านการตรวจสอบ'");
+      navigate("/staff_candidateList");
+    } catch (error) {
+      alert("เกิดข้อผิดพลาดในการอัปเดตสถานะ");
+      console.error(error);
+    }
   };
 
-  const ConfirmModalCancelOne = () => {
-    alert("เอกสารไม่ครบถ้วน");
-    setIsModalOpenCancel(!isModalOpenCancel);
-    navigate("/staff_candidateList");
+  const handleSentdata = async () => {
+    try {
+      await sendToCommittee(id);
+      alert("ส่งข้อมูลเรียบร้อย");
+      navigate("/staff_cadidateWaitingList");
+    } catch (error) {
+      alert("เกิดข้อผิดพลาดในการส่งข้อมูลไปที่กรรมการ");
+      console.error(error);
+    }
   };
 
-  const ConfirmModalCancelTwo = () => {
-    alert("เอกสารไม่ถูกต้อง");
-    setIsModalOpenCancel(!isModalOpenCancel);
-    navigate("/staff_candidateList");
+  // 1. If ANY question is fail → set "ไม่ผ่านการตรวจสอบ"
+  const handleSubmitFail = async (failReasons) => {
+    try {
+      await updateApprovalStatus(id, "ไม่ผ่านการตรวจสอบ", failReasons);
+      alert("สถานะผู้สมัครถูกเปลี่ยนเป็น 'ไม่ผ่านการตรวจสอบ'");
+    } catch (error) {
+      console.error("Error updating approval status:", error);
+      alert("เกิดข้อผิดพลาดในการอัปเดตสถานะ");
+    }
   };
 
-  const ConfirmModalCancelThree = () => {
-    alert("เอกสารไม่ถูกต้องและไม่ครบถ้วน");
-    setIsModalOpenCancel(!isModalOpenCancel);
-    navigate("/staff_candidateList");
+  // 2. If ALL are pass → set "ผ่านการตรวจสอบ" or maybe "รอการอนุมัติ"
+  const handleSubmitPass = async () => {
+    try {
+      await updateApprovalStatus(id, "ผ่านการตรวจสอบ");
+      alert("สถานะผู้สมัครถูกเปลี่ยนเป็น 'ผ่านการตรวจสอบ'");
+      navigate("/committee_candidateList"); // or wherever you want to go next
+    } catch (error) {
+      console.error("Error updating approval status:", error);
+      alert("เกิดข้อผิดพลาดในการอัปเดตสถานะ");
+    }
   };
+
+  // const toggleModalCancel = () => {
+  //   setIsModalOpenCancel(!isModalOpenCancel);
+  // };
+
+  // const ConfirmModalCancelOne = () => {
+  //   alert("เอกสารไม่ครบถ้วน");
+  //   setIsModalOpenCancel(!isModalOpenCancel);
+  //   navigate("/staff_candidateList");
+  // };
+
+  // const ConfirmModalCancelTwo = () => {
+  //   alert("เอกสารไม่ถูกต้อง");
+  //   setIsModalOpenCancel(!isModalOpenCancel);
+  //   navigate("/staff_candidateList");
+  // };
+
+  // const ConfirmModalCancelThree = () => {
+  //   alert("เอกสารไม่ถูกต้องและไม่ครบถ้วน");
+  //   setIsModalOpenCancel(!isModalOpenCancel);
+  //   navigate("/staff_candidateList");
+  // };
 
   return (
-    <div class="ibm-plex-sans-thai-medium">
-      <div class="p-12 sm:ml-64 overflow-hidden">
-        <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
-          <li class="me-2">
+    <div className="ibm-plex-sans-thai-medium">
+      {/* Reusable Modal */}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        title={modalTitle}
+        description={modalDescription}
+        onConfirm={() => {
+          onConfirmAction();
+          closeModal();
+        }}
+        onCancel={closeModal}
+      />
+
+      <div className="p-12 sm:ml-64 overflow-hidden">
+        {/* Tabs */}
+        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+          <li className="me-2">
             <button
               onClick={() => setActiveTab("personalInfo")}
-              class={`inline-block p-4 rounded-t-lg ${
+              className={`inline-block p-4 rounded-t-lg ${
                 activeTab === "personalInfo"
-                  ? "text-white bg-gray-600 dark:bg-gray-600"
-                  : "text-gray-500 bg-gray-300 dark:text-white"
+                  ? "text-white bg-gray-600"
+                  : "text-gray-500 bg-gray-300"
               }`}
             >
               ข้อมูลส่วนตัว
             </button>
           </li>
-          {/* แท็บ ข้อมูลทายาท */}
-          <li class="me-2">
+          <li className="me-2">
             <button
               onClick={() => setActiveTab("heirInfo")}
-              class={`inline-block p-4 rounded-t-lg ${
+              className={`inline-block p-4 rounded-t-lg ${
                 activeTab === "heirInfo"
-                  ? "text-white bg-gray-600 dark:bg-gray-600"
-                  : "text-gray-500 bg-gray-300 dark:text-white"
+                  ? "text-white bg-gray-600"
+                  : "text-gray-500 bg-gray-300"
               }`}
             >
               ข้อมูลทายาท
             </button>
           </li>
+          {context === "committeeCandidateProfile" && (
+            <li className="me-2">
+              <button
+                onClick={() => setActiveTab("candidateVerification")}
+                className={`inline-block p-4 rounded-t-lg ${
+                  activeTab === "candidateVerification"
+                    ? "text-white bg-gray-600"
+                    : "text-gray-500 bg-gray-300"
+                }`}
+              >
+                ตรวจสอบคุณสมบัติ
+              </button>
+            </li>
+          )}
         </ul>
 
-        <div class="mb-8 overflow-hidden">
+        {/* Tab Content */}
+        <div className="mb-8 overflow-hidden">
           {activeTab === "personalInfo" && candidate && (
             <Information_personal data={candidate} />
           )}
           {activeTab === "heirInfo" && heir && <Information_heir data={heir} />}
+          {activeTab === "candidateVerification" &&
+            context === "committeeCandidateProfile" && (
+              <CommitteeVerification candidateId={id} />
+            )}
         </div>
 
-        <div class="relative mt-14 flex justify-center items-center">
-          <button
-            type="button"
-            onClick={toggleModal}
-            class="focus:outline-none text-white bg-lime-700 hover:bg-lime-800 focus:ring-4 focus:ring-lime-300 font-medium rounded-lg text-base px-5 py-2.5 me-9 mb-2 dark:bg-lime-600 dark:hover:bg-lime-700 dark:focus:ring-lime-800"
-          >
-            ผ่านการตรวจสอบ
-          </button>
-
-          {isModalOpen && (
-            <div
-              id="popup-modal"
-              class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full bg-black bg-opacity-50"
+        {/* condition ว่าถ้าเจออันไหนให้เรนเดอร์ปุ่มนั้น โดยค่าจะส่งมากจากแต่ละไฟล์ที่ใช้ */}
+        {context === "waitingCandidateProfile" && (
+          <div className="relative mt-14 flex justify-center items-center gap-4">
+            <button
+              type="button"
+              onClick={() =>
+                openModal(
+                  "ยืนยันการส่งข้อมูล",
+                  "คุณต้องการส่งข้อมูลไปที่กรรมการหรือไม่?",
+                  () => handleSentdata()
+                )
+              }
+              className="text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2"
             >
-              <div class="relative p-4 w-full max-w-md max-h-full">
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-100">
-                  <button
-                    type="button"
-                    onClick={toggleModal}
-                    class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    <svg
-                      class="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                      />
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                  </button>
-                  <div class="p-4 md:p-5 text-center">
-                    <svg
-                      class="mx-auto mb-4 text-gray-800 w-12 h-12 dark:text-gray-800"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
-                    <p class="mb-1 text-lg font-bold text-gray-800 dark:text-gray-800">
-                      ยืนยันการตรวจสอบ
-                    </p>
-                    <p class="mb-5 text-base font-normal text-gray-800 dark:text-gray-800">
-                      โปรดตรวจสอบความถูกต้องและ <br />{" "}
-                      ครบถ้วนของเอกสารก่อนกดยืนยัน <br />{" "}
-                      ของข้อมูลส่วนตัวผู้สมัครและทายาท
-                    </p>
-                    <button
-                      onClick={ConfirmModal}
-                      class="text-white text-gray-900 focus:outline-none bg-white rounded-lg border border-lime-200 hover:bg-lime-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-lime-100 dark:focus:ring-lime-600 dark:bg-lime-700 dark:text-lime-400 dark:border-lime-500 dark:hover:text-white dark:hover:bg-lime-600 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                    >
-                      ยืนยัน
-                    </button>
-                    <button
-                      onClick={toggleModal}
-                      class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-red-200 hover:bg-red-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-700 dark:bg-red-800 dark:text-red-400 dark:border-red-600 dark:hover:text-white dark:hover:bg-red-700"
-                    >
-                      ยกเลิก
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <button
-            type="button"
-            onClick={toggleModalCancel}
-            class="focus:outline-none text-white bg-red-950 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2 dark:bg-red-700 dark:hover:bg-red-700 dark:focus:ring-red-900"
-          >
-            ไม่ผ่านการตรวจสอบ
-          </button>
-
-          {isModalOpenCancel && (
-            <div
-              id="popup-modal"
-              class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full bg-black bg-opacity-50"
+              ส่งข้อมูล
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                openModal(
+                  "ยืนยันการลบ",
+                  "คุณต้องการลบข้อมูลผู้สมัครหรือไม่?",
+                  () => alert("ลบข้อมูล clicked!")
+                )
+              }
+              className="text-white bg-red-600 hover:bg-red-700 rounded-lg px-4 py-2"
             >
-              <div class="relative p-4 w-full max-w-md max-h-full">
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-100">
-                  <button
-                    type="button"
-                    onClick={toggleModalCancel}
-                    class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    <svg
-                      class="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                      />
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                  </button>
-                  <div class="p-4 md:p-5 text-center">
-                    <svg
-                      class="mx-auto mb-4 text-gray-800 w-12 h-12 dark:text-gray-800"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
-                    <p class="mb-1 text-lg font-bold text-gray-800 dark:text-gray-800">
-                      เอกสารไม่ผ่านการตรวจสอบ
-                    </p>
-                    <p class="mb-5 text-base font-normal text-gray-800 dark:text-gray-800">
-                      โปรดเลือกผลไม่ผ่านการตรวจสอบเอกสาร
-                    </p>
-                    <button
-                      onClick={ConfirmModalCancelOne}
-                      class="text-white text-gray-900 focus:outline-none bg-white rounded-lg border border-yellow-200 hover:bg-yellow-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-yellow-100 dark:focus:ring-yellow-600 dark:bg-yellow-700 dark:text-yellow-400 dark:border-yellow-500 dark:hover:text-white dark:hover:bg-yellow-600 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                    >
-                      ไม่ครบถ้วน
-                    </button>
-                    <button
-                      onClick={ConfirmModalCancelTwo}
-                      class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-orange-200 hover:bg-orange-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-orange-100 dark:focus:ring-orange-700 dark:bg-orange-800 dark:text-orange-400 dark:border-orange-600 dark:hover:text-white dark:hover:bg-orange-700"
-                    >
-                      ไม่ถูกต้อง
-                    </button>
-                    <button
-                      onClick={ConfirmModalCancelThree}
-                      class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-red-200 hover:bg-red-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-700 dark:bg-red-800 dark:text-red-400 dark:border-red-600 dark:hover:text-white dark:hover:bg-red-700"
-                    >
-                      ทั้งคู่
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+              ลบข้อมูล
+            </button>
+          </div>
+        )}
+
+        {context === "staffCandidateProfile" && (
+          <div className="relative mt-14 flex justify-center items-center gap-4">
+            <button
+              type="button"
+              onClick={() =>
+                openModal(
+                  "ยืนยันการตรวจสอบ",
+                  "โปรดตรวจสอบความถูกต้องและครบถ้วนของเอกสารก่อนกดยืนยัน",
+                  () => handleApproveCandidate()
+                )
+              }
+              className="focus:outline-none text-white bg-lime-800 hover:bg-lime-700 focus:ring-4 focus:ring-lime-300 font-medium rounded-lg text-base px-5 py-2.5  dark:bg-lime-600 dark:hover:bg-lime-500 dark:focus:ring-lime-600"
+            >
+              ผ่านการตรวจสอบ
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                openModal(
+                  "ไม่ผ่านการตรวจสอบ",
+                  "โปรดเลือกเหตุผลที่ไม่ผ่านการตรวจสอบ",
+
+                  () => handleRejectCandidate("ไม่ครบถ้วน")
+                )
+              }
+              className="py-2.5 px-5 ms-3 text-base font-medium text-white focus:outline-none  rounded-lg   focus:z-10 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-700 dark:bg-red-800  dark:hover:text-white dark:hover:bg-red-700"
+            >
+              ไม่ผ่านการตรวจสอบ
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export default StaffCandidateProfile;
+export default CandidateProfile;

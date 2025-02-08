@@ -7,7 +7,6 @@ import bcrypt from "bcrypt"
 
 
 
-
 const app = express();
 const port = 3000;
 

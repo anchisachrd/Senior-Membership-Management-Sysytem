@@ -9,6 +9,10 @@ import * as emailService from "../services/emailService.js"
 import bcrypt from "bcrypt"
 import crypto from 'crypto';
 
+
+// ไฟล์นี้จะเก็บพวก service ที่เป็น before verify doc คือ สร้างข้อมูลผู้สมัคร รหัสผ่าน อีเมลยืนยันการสมัคร ดึงข้อมูลที่เป็น orginal ไม่มีการแก้ไขใดๆ
+// ถ้าแก้ไขจะไปอยู่ใน candidateService.js และอื่นๆ
+
 const generateRandomPassword = (length = 12) => {
   return crypto.randomBytes(length).toString('base64').slice(0, length);
 };
@@ -252,7 +256,17 @@ export const fetchAllCandidates = async () => {
   }
 };
 
-export const fetchCandidateHeirAndAddresses = async (candidateId) => {
+export const fetchAllCandidateAndHeirData = async (candidateId) => {
+
+  function convertDocsArrayToObject(docsArray) {
+    const docObject = {};
+    docsArray.forEach(doc => {
+      // ต้องแปลงเพราะขกไป map ข้างหน้า ข้อมูลมัน return เป็น array เลยต้องแปลงเป็น obj
+      // docObject["house_registration"] = "upload/something.jpeg"
+      docObject[doc.doc_type] = doc.doc_path;
+    });
+    return docObject;
+  }
 
   // get candidate data
   const candidate = await candidateModel.getCandidateById(candidateId);
@@ -267,8 +281,15 @@ export const fetchCandidateHeirAndAddresses = async (candidateId) => {
   //get heir address
   const heirAddress = await addressModel.getAddressById(heir.address_id);
 
-  const candidateAccount = await accountModel.getAccountById(candidate.address_id)
+  const candidateAccount = await accountModel.getAccountById(candidate.account_id)
   const heirAccount = await accountModel.getAccountById(heir.account_id)
+
+  const candidateDocuments = await documentModel.getDocumentsByCandidateId(candidate.candidate_id);
+  const heirDocuments = await documentModel.getDocumentsByHeirId(heir.heir_id);
+
+  const candidateDocsObj = convertDocsArrayToObject(candidateDocuments);
+  const heirDocsObj = convertDocsArrayToObject(heirDocuments);
+
 
   return {
     candidate_id: candidate.candidate_id,
@@ -283,6 +304,9 @@ export const fetchCandidateHeirAndAddresses = async (candidateId) => {
     account_id: candidate.account_id,
     address_id: candidate.address_id,
     heir_id: candidate.heir_id,
+    email: candidateAccount.email,
+
+    documents: candidateDocsObj,
 
     // Candidate's address 
     address: {
@@ -311,6 +335,9 @@ export const fetchCandidateHeirAndAddresses = async (candidateId) => {
       relationship: heir.relationship,
       account_id: heir.account_id,
       address_id: heir.address_id,
+      email: heirAccount.email,
+
+      documents: heirDocsObj,
 
       // Heir address
       address: {
@@ -327,4 +354,6 @@ export const fetchCandidateHeirAndAddresses = async (candidateId) => {
     }
   };
 };
+
+
 

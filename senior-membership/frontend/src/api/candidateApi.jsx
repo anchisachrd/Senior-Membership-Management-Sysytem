@@ -136,3 +136,97 @@ export const getCandidateAndHeirById = async (id) => {
     throw error;
   }
 };
+
+//update สถานะการตรวจสอบเอกสารของเจ้าหน้าที่
+export const updateCandidateStatus = async (candidateId) => {
+  try {
+      const response = await axios.put(`${apiUrl}/${candidateId}/verify`);
+      return response.data;
+  } catch (error) {
+      console.error("Error updating document verification status:", error);
+      throw error;
+  }
+};
+
+//เอาข้อมูลของผู้สมัครที่ได้รับการตรวจสอบเอกสารจากจนทแล้ว
+export const getVerifiedCandidates = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}/verified`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching verified candidates:", error);
+    throw error;
+  }
+};
+
+export const getWatingApproveCandidate = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}/candidate-list`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching verified candidates:", error);
+    throw error;
+  }
+};
+
+
+// เปลี่ยน status จาก ยังไม่ได้ตรวจสอบ เป็น รอการตรวจสอบ
+export const sendToCommittee = async (candidateId) => {
+  try {
+    const response = await axios.put(`${apiUrl}/send-to-committee/${candidateId}`);
+    console.log("response: ", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating approval status:", error);
+    throw error;
+  }
+};
+
+export const deleteCandidate = async (candidateId) => {
+  try {
+    const response = await axios.delete(`${apiUrl}/${candidateId}`);
+    console.log("response: ", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating approval status:", error);
+    throw error;
+  }
+};
+
+export const updateApprovalStatus = async (candidateId, status, failReasons) => {
+  try {
+    const response = await axios.put(`${apiUrl}/${candidateId}/approval-status`, {
+      status,
+      failReasons, // This is only for sending an email
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating approval status:", error);
+    throw error;
+  }
+};
+
+export const getVerificationDetail = async (candidateId) => {
+  try {
+    const response = await axios.get(`${apiUrl}/verification/${candidateId}`);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error get detail:", error);
+    throw error;
+  }
+};
+
+export const saveVerificationDetail = async (candidateId, details) => {
+  try {
+    const response = await axios.put(`${apiUrl}/verification/${candidateId}`, {details});
+
+    return response.data;
+  } catch (error) {
+    console.error("Error get detail:", error);
+    throw error;
+  }
+};
+
+
