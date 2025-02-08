@@ -38,3 +38,22 @@ export const approvalStatusUpdate = async (candidateId, status,  failReasons) =>
     throw new Error("Error updating approval status");
   }
 }
+
+export const getCandidateVerificationDetail = async (candidateId) =>{
+  try{
+    const getDetail = await candidateModel.getCandidateVerificationDetails(candidateId);
+    return getDetail;
+  } catch (error) {
+    console.error("Error get details:", error);
+  }
+}
+
+export const updateCandidateVerificationDetail = async (candidateId, details)=>{
+  try{
+    const updateDetail = await candidateModel.updateCandidateVerificationDetails(candidateId,  JSON.stringify(details) );
+    return updateDetail;
+  } catch (error) {
+    console.error("Error update details:", error);
+  }
+}
+

@@ -61,9 +61,11 @@ router.post("/", multipleUpload, candidateController.createCandidateData);
 router.get('/verified', candidateController.getVerifiedCandidates); 
 router.get('/candidate-list', candidateController.getWaitingApproveCandidates);
 router.get('/:id', candidateController.getCandidateandHeirById);
+router.get("/verification/:candidateId",  candidateController.getVerificationDetails);
 router.put('/:id/verify', candidateController.updateDocStatus);
 router.put('/send-to-committee/:candidateId', candidateController.sendToCommittee);
 router.put("/:candidateId/approval-status", candidateController.updateCandidateApprovalStatus);
+router.put("/verification/:candidateId", candidateController.updateVerificationDetails)
 router.post("/", candidateController.createCandidateData);
 router.get('/', candidateController.getCandidates);
 router.delete('/:candidateId', candidateController.deleteCandidate);

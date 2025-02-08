@@ -4,7 +4,7 @@ import {
   getCandidateAndHeirById,
   updateCandidateStatus,
   sendToCommittee,
-  updateApprovalStatus
+  updateApprovalStatus,
 } from "../../api/candidateApi";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { LuFile } from "react-icons/lu";
@@ -659,7 +659,7 @@ function Information_heir({ data }) {
     </div>
   );
 }
-function StaffCandidateProfile() {
+function CandidateProfile() {
   const { id } = useParams();
   const location = useLocation();
   const { context } = location.state || { context: null };
@@ -729,7 +729,7 @@ function StaffCandidateProfile() {
   // 1. If ANY question is fail → set "ไม่ผ่านการตรวจสอบ"
   const handleSubmitFail = async (failReasons) => {
     try {
-       await updateApprovalStatus(id, "ไม่ผ่านการตรวจสอบ", failReasons);
+      await updateApprovalStatus(id, "ไม่ผ่านการตรวจสอบ", failReasons);
       alert("สถานะผู้สมัครถูกเปลี่ยนเป็น 'ไม่ผ่านการตรวจสอบ'");
     } catch (error) {
       console.error("Error updating approval status:", error);
@@ -740,7 +740,7 @@ function StaffCandidateProfile() {
   // 2. If ALL are pass → set "ผ่านการตรวจสอบ" or maybe "รอการอนุมัติ"
   const handleSubmitPass = async () => {
     try {
-       await updateApprovalStatus(id, "ผ่านการตรวจสอบ");
+      await updateApprovalStatus(id, "ผ่านการตรวจสอบ");
       alert("สถานะผู้สมัครถูกเปลี่ยนเป็น 'ผ่านการตรวจสอบ'");
       navigate("/committee_candidateList"); // or wherever you want to go next
     } catch (error) {
@@ -812,6 +812,20 @@ function StaffCandidateProfile() {
               ข้อมูลทายาท
             </button>
           </li>
+          {context === "committeeCandidateProfile" && (
+            <li className="me-2">
+              <button
+                onClick={() => setActiveTab("candidateVerification")}
+                className={`inline-block p-4 rounded-t-lg ${
+                  activeTab === "candidateVerification"
+                    ? "text-white bg-gray-600"
+                    : "text-gray-500 bg-gray-300"
+                }`}
+              >
+                ตรวจสอบคุณสมบัติ
+              </button>
+            </li>
+          )}
         </ul>
 
         {/* Tab Content */}
@@ -820,6 +834,10 @@ function StaffCandidateProfile() {
             <Information_personal data={candidate} />
           )}
           {activeTab === "heirInfo" && heir && <Information_heir data={heir} />}
+          {activeTab === "candidateVerification" &&
+            context === "committeeCandidateProfile" && (
+              <CommitteeVerification candidateId={id} />
+            )}
         </div>
 
         {/* condition ว่าถ้าเจออันไหนให้เรนเดอร์ปุ่มนั้น โดยค่าจะส่งมากจากแต่ละไฟล์ที่ใช้ */}
@@ -886,18 +904,9 @@ function StaffCandidateProfile() {
             </button>
           </div>
         )}
-
-        {context === "committeeCandidateProfile" && (
-          <div className="relative mt-14 flex justify-center items-center gap-4">
-            <CommitteeVerification
-              onSubmitFail={(failReasons) => handleSubmitFail(failReasons)}
-              onSubmitPass={() => handleSubmitPass()}
-            />
-          </div>
-        )}
       </div>
     </div>
   );
 }
 
-export default StaffCandidateProfile;
+export default CandidateProfile;

@@ -88,4 +88,25 @@ export const updateApprovalStatus = async (candidateId, status) => {
   return rows[0];
 
 };
+
+export const getCandidateVerificationDetails = async (candidateId) => {
+  const { rows } = await query(
+    `SELECT verification_details 
+     FROM candidates 
+     WHERE candidate_id = $1`,
+    [candidateId]
+  );
+  return rows.length > 0 ? rows[0].verification_details : {}; 
+}; 
+
+export const updateCandidateVerificationDetails = async (candidateId, details) => {
+  const { rows } = await query(
+    `UPDATE candidates 
+     SET verification_details = $1 
+     WHERE candidate_id = $2 
+     RETURNING *`,
+    [details, candidateId]
+  );
+  return rows[0];
+};
   

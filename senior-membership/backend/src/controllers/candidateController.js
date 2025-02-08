@@ -236,3 +236,25 @@ export const updateCandidateApprovalStatus = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getVerificationDetails = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    const details = await candidateService.getCandidateVerificationDetail(candidateId);
+    res.json(details);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching verification details", error });
+  }
+};
+export const updateVerificationDetails = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    const { details } = req.body;
+
+    const updatedCandidate = await candidateService.updateCandidateVerificationDetail(candidateId, details);
+    res.json(updatedCandidate);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating verification details", error });
+  }
+};
+

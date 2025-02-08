@@ -206,3 +206,27 @@ export const updateApprovalStatus = async (candidateId, status, failReasons) => 
     throw error;
   }
 };
+
+export const getVerificationDetail = async (candidateId) => {
+  try {
+    const response = await axios.get(`${apiUrl}/verification/${candidateId}`);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error get detail:", error);
+    throw error;
+  }
+};
+
+export const saveVerificationDetail = async (candidateId, details) => {
+  try {
+    const response = await axios.put(`${apiUrl}/verification/${candidateId}`, {details});
+
+    return response.data;
+  } catch (error) {
+    console.error("Error get detail:", error);
+    throw error;
+  }
+};
+
+
