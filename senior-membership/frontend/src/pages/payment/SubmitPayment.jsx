@@ -22,6 +22,8 @@ function SubmitPayment() {
 
     const isFormValid = namePayment !== "" && bank !== "" && amount !== "" && slip !== "";
 
+    const nameBank = []
+
 
     return (
         <div class='p-12 sm:ml-64'>

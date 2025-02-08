@@ -4,11 +4,12 @@ import { IoNotificationsOutline, IoDocumentTextOutline, IoHomeOutline } from "re
 import { AiOutlineHistory } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { TiDocumentText } from "react-icons/ti";
+import { FaUserPlus } from "react-icons/fa6";
 import { Link } from "react-router";
 
 function Sidebar() {
-  const role = 'member';
-  // const role = 'heir';
+  // const role = 'member';
+  const role = 'heir';
   return (
 
     <div className='ibm-plex-sans-thai-medium'>
@@ -80,6 +81,16 @@ function Sidebar() {
                   <span class="ms-3 mt-1 dark:group-hover:text-white">ฟอร์มคำร้อง</span>
                 </a>
               </li>
+
+              <li>
+                <a href="#" class="flex items-center p-3 rounded-lg dark:text-gray-500 dark:hover:bg-gray-700 group">
+                  <FaUserPlus class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" />
+                  <span class="ms-3 mt-1 dark:group-hover:text-white">สมัครสมาชิก</span>
+                </a>
+              </li>
+
+
+
             </ul>
           )}
         </div>
